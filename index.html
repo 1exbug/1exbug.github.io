@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>1exbug — Bug Bounty / Web / API</title>
+  <meta name="description" content="1exbug — security research, web and API findings, write-ups and methodology.">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="noise"></div>
+
+  <header class="topbar">
+    <a class="brand" href="#home">1exbug<span>_</span></a>
+    <button class="menu-btn" aria-label="Open menu">☰</button>
+  </header>
+
+  <aside class="sidebar">
+    <nav>
+      <a href="#home" class="active">01 / Home</a>
+      <a href="#about">02 / About</a>
+      <a href="#findings">03 / Write-ups</a>
+      <a href="#projects">04 / Projects</a>
+      <a href="#methodology">05 / Methodology</a>
+      <a href="#skills">06 / Tools & Skills</a>
+      <a href="#contact">07 / Contact</a>
+    </nav>
+  </aside>
+
+  <main>
+    <section id="home" class="hero section">
+      <div class="hero-grid"></div>
+      <div class="eyebrow">BUG BOUNTY · WEB / API</div>
+      <h1>1exbug<span class="cursor">_</span></h1>
+      <p class="hero-text">
+        Security researcher focused on web applications, APIs, authentication,
+        access control and business-logic vulnerabilities.
+      </p>
+      <div class="terminal">
+        <div><span class="prompt">$</span> whoami</div>
+        <div class="terminal-output">1exbug — security researcher</div>
+        <div><span class="prompt">$</span> focus</div>
+        <div class="terminal-output">web · api · auth · idor · business logic</div>
+      </div>
+      <div class="hero-links">
+        <a class="button" href="#findings">View findings →</a>
+        <a class="text-link" href="https://t.me/onexbug" target="_blank" rel="noopener">@onexbug ↗</a>
+      </div>
+    </section>
+
+    <section id="about" class="section">
+      <div class="section-head">
+        <span>02</span>
+        <h2>About me</h2>
+      </div>
+      <div class="two-col">
+        <div>
+          <p class="big-copy">
+            I research real-world web and API applications, looking for
+            security weaknesses that can lead to unauthorized access,
+            account compromise, data exposure or business-logic abuse.
+          </p>
+        </div>
+        <div class="muted-copy">
+          <p>My main focus is understanding how an application behaves beyond its intended user flow.</p>
+          <p>I document findings, reproduce issues and report them through responsible disclosure channels.</p>
+        </div>
+      </div>
+
+      <div class="directions">
+        <article><span>01</span><h3>Web applications</h3><p>Authentication, authorization, IDOR, sessions and business logic.</p></article>
+        <article><span>02</span><h3>API & integrations</h3><p>REST/API flows, object access, missing auth checks and edge cases.</p></article>
+        <article><span>03</span><h3>Infrastructure</h3><p>WebSocket and application-layer attack surface during testing.</p></article>
+      </div>
+    </section>
+
+    <section id="findings" class="section">
+      <div class="section-head">
+        <span>03</span>
+        <h2>Write-ups / Findings</h2>
+      </div>
+      <p class="section-intro">
+        Selected security findings. Detailed write-ups intentionally keep sensitive
+        exploit material, credentials and tokens private.
+      </p>
+
+      <div class="cards">
+        <article class="card">
+          <div class="card-top"><span>01</span><span>WEB / API</span></div>
+          <h3>1xSlots Casino</h3>
+          <p>Authentication, 2FA, session, transfer, password-reset and withdrawal-related findings.</p>
+          <div class="tags">
+            <span>Rate limit</span><span>2FA</span><span>IDOR</span><span>Business logic</span>
+          </div>
+          <a href="writeup-1xslots.html" class="card-link">Read write-up →</a>
+        </article>
+
+        <article class="card">
+          <div class="card-top"><span>02</span><span>WEB / API / WS</span></div>
+          <h3>ON-X Casino</h3>
+          <p>Authentication, IDOR, KYC, payment, loyalty-point, race-condition and WebSocket findings.</p>
+          <div class="tags">
+            <span>Auth</span><span>IDOR</span><span>Race condition</span><span>WebSocket</span>
+          </div>
+          <a href="writeup-onx.html" class="card-link">Read write-up →</a>
+        </article>
+      </div>
+
+      <div class="pending">
+        <div class="pending-title">Pending / disclosed targets</div>
+        <div class="pending-list">
+          <span>Zooma Casino</span>
+          <span>BC.GAME</span>
+          <span>JetTon Casino</span>
+          <span>Shuffle</span>
+          <span>Cloudbet</span>
+        </div>
+      </div>
+    </section>
+
+    <section id="projects" class="section">
+      <div class="section-head">
+        <span>04</span>
+        <h2>Projects</h2>
+      </div>
+      <div class="project-list">
+        <article class="project">
+          <div><span class="project-number">01</span><h3>1exbug portfolio</h3></div>
+          <p>Personal security research portfolio with findings, methodology and write-ups.</p>
+          <span class="project-status">ACTIVE</span>
+        </article>
+        <article class="project">
+          <div><span class="project-number">02</span><h3>Security research</h3></div>
+          <p>Continuous testing of web applications and APIs with a focus on practical vulnerabilities.</p>
+          <span class="project-status">ONGOING</span>
+        </article>
+      </div>
+    </section>
+
+    <section id="methodology" class="section">
+      <div class="section-head">
+        <span>05</span>
+        <h2>My path</h2>
+      </div>
+      <div class="steps">
+        <article><span>01</span><h3>Scope & rules</h3><p>Understand the target, allowed assets and disclosure requirements.</p></article>
+        <article><span>02</span><h3>Recon</h3><p>Map endpoints, functionality, parameters, authentication and attack surface.</p></article>
+        <article><span>03</span><h3>Hunting & chaining</h3><p>Test access control, logic and edge cases, then connect related weaknesses.</p></article>
+        <article><span>04</span><h3>Report</h3><p>Reproduce the issue, explain impact and provide clear remediation context.</p></article>
+      </div>
+    </section>
+
+    <section id="skills" class="section">
+      <div class="section-head">
+        <span>06</span>
+        <h2>Tools & Skills</h2>
+      </div>
+      <div class="skill-grid">
+        <div><span>Web</span><p>Burp Suite · HTTP · Cookies · Sessions · Auth flows</p></div>
+        <div><span>API</span><p>REST · JSON · Endpoint enumeration · Access control</p></div>
+        <div><span>Testing</span><p>IDOR · Business logic · Race conditions · Rate limits</p></div>
+        <div><span>Analysis</span><p>Request/response analysis · Reproduction · Reporting</p></div>
+      </div>
+    </section>
+
+    <section id="contact" class="section contact">
+      <div class="section-head">
+        <span>07</span>
+        <h2>Contact</h2>
+      </div>
+      <p class="big-copy">For security research, disclosure or collaboration.</p>
+      <div class="contact-links">
+        <a href="https://t.me/onexbug" target="_blank" rel="noopener">
+          <span>Telegram</span><strong>@onexbug ↗</strong>
+        </a>
+        <a href="https://github.com/1exbug" target="_blank" rel="noopener">
+          <span>GitHub</span><strong>github.com/1exbug ↗</strong>
+        </a>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <span>© 2026 1exbug</span>
+    <span>Responsible disclosure · Research portfolio</span>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
