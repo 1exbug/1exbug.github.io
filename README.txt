@@ -1,16 +1,23 @@
-# 1exbug — updated site
+1exbug portfolio v2
+
+Features:
+- Dark security-researcher design
+- English / Russian language switch
+- Language preference saved in browser localStorage
+- Responsive mobile navigation
+- Animated terminal, grid, status indicator and reveal effects
+- Write-up pages with the same language switch
+- Favicon and improved metadata
 
 Files:
-- index.html — updated main portfolio
-- style.css — main styles
-- script.js — navigation/scroll behavior
-- writeup-1xslots.html — 1xSlots write-up
-- writeup-onx.html — ON-X write-up
-- writeup-style.css — styles for write-up pages
+index.html
+style.css
+script.js
+lang.js
+writeup-style.css
+lang-writeup.js
+writeup-1xslots.html
+writeup-onx.html
+favicon.svg
 
-Contact:
-- Telegram: @onexbug
-- https://t.me/onexbug
-- GitHub: https://github.com/1exbug
-
-Upload/replace these files in the root of your GitHub Pages repository.
+Deployment: upload all files to the root of the GitHub Pages repository.
