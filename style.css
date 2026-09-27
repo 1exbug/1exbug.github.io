@@ -3,3 +3,93 @@
 .target-row.clickable{cursor:pointer}.target-row.clickable b{transition:transform .2s}.target-row.clickable:hover b{transform:translateX(4px)}.lang{min-width:30px}.lang:focus-visible,.round-btn:focus-visible,.btn:focus-visible,.read-link:focus-visible,.target-row.clickable:focus-visible,.contact-links a:focus-visible,.contact-links button:focus-visible{outline:2px solid var(--green);outline-offset:3px}
 
 .status.confirmed{border-color:rgba(170,255,60,.45);color:var(--green);}
+
+
+/* Vodka Casino research card */
+.stack-card {
+  position: relative;
+  display: block;
+  padding: 26px;
+  border: 1px solid rgba(255,255,255,.08);
+  border-radius: 18px;
+  background: rgba(255,255,255,.018);
+  color: inherit;
+  text-decoration: none;
+  overflow: hidden;
+  transition: transform .25s ease, border-color .25s ease, background .25s ease;
+}
+.stack-card::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 85% 15%, rgba(106,169,255,.10), transparent 38%);
+  pointer-events: none;
+}
+.stack-card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(116,180,255,.30);
+  background: rgba(255,255,255,.028);
+}
+.stack-card__header, .stack-card__meta {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  gap: 9px;
+}
+.stack-card__header { justify-content: space-between; margin-bottom: 22px; }
+.stack-card__tag, .stack-card__status {
+  padding: 6px 9px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+.stack-card__tag {
+  color: #74b4ff;
+  background: rgba(80,160,255,.10);
+  border: 1px solid rgba(80,160,255,.20);
+}
+.stack-card__status {
+  color: #9fe6b4;
+  background: rgba(80,190,110,.08);
+  border: 1px solid rgba(80,190,110,.18);
+}
+.stack-card h3 {
+  position: relative;
+  z-index: 1;
+  margin: 0 0 10px;
+  font-size: 25px;
+}
+.stack-card p {
+  position: relative;
+  z-index: 1;
+  margin: 0;
+  color: #aeb7c6;
+  line-height: 1.7;
+}
+.stack-card__meta {
+  flex-wrap: wrap;
+  margin-top: 18px;
+}
+.stack-card__meta span {
+  padding: 7px 10px;
+  border-radius: 8px;
+  background: #111722;
+  border: 1px solid rgba(255,255,255,.07);
+  color: #aeb8c8;
+  font-size: 12px;
+}
+.stack-card__link {
+  position: relative;
+  z-index: 1;
+  display: inline-block;
+  margin-top: 22px;
+  color: #74b4ff;
+  font-size: 13px;
+  font-weight: 700;
+}
+@media (min-width: 850px) {
+  .stack-card { grid-column: span 2; }
+}
