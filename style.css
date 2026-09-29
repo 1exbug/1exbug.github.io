@@ -22,12 +22,12 @@
   content: '';
   position: absolute;
   inset: 0;
-  background: radial-gradient(circle at 85% 15%, rgba(106,169,255,.10), transparent 38%);
+  background: radial-gradient(circle at 85% 15%, rgba(183,255,91,.08), transparent 38%);
   pointer-events: none;
 }
 .stack-card:hover {
   transform: translateY(-4px);
-  border-color: rgba(116,180,255,.30);
+  border-color: rgba(183,255,91,.30);
   background: rgba(255,255,255,.028);
 }
 .stack-card__header, .stack-card__meta {
@@ -47,9 +47,9 @@
   text-transform: uppercase;
 }
 .stack-card__tag {
-  color: #74b4ff;
-  background: rgba(80,160,255,.10);
-  border: 1px solid rgba(80,160,255,.20);
+  color: #b7ff5b;
+  background: rgba(183,255,91,.08);
+  border: 1px solid rgba(183,255,91,.20);
 }
 .stack-card__status {
   color: #9fe6b4;
@@ -86,7 +86,7 @@
   z-index: 1;
   display: inline-block;
   margin-top: 22px;
-  color: #74b4ff;
+  color: #b7ff5b;
   font-size: 13px;
   font-weight: 700;
 }

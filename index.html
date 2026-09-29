@@ -122,6 +122,22 @@
       </div>
     </article>
     
+    <article class="research-card disclosure reveal delay-3">
+      <div class="card-meta"><span>CASHER</span><i>REPORTED</i></div>
+      <div class="card-number">04</div>
+      <h3 data-i18n="cards.casher.title">Security findings</h3>
+      <p data-i18n="cards.casher.text">Production credential exposure, client-side authentication key exposure and several access-control and injection points reported to Casher.</p>
+      <div class="tags"><span>Credentials</span><span>Auth Key</span><span>BOLA</span><span>MQTT</span><span>XSS</span></div>
+      <div class="disclosure-note">
+        <p><strong data-i18n="cards.casher.statusLabel">Статус:</strong> <span class="status pending" data-i18n="cards.casher.status">Report sent to Casher</span></p>
+        <p><strong data-i18n="cards.casher.finding1Label">Exposed Production Credentials:</strong> <span data-i18n="cards.casher.finding1">Production MQTT/WebSocket credentials found in a public JavaScript bundle.</span></p>
+        <p><strong data-i18n="cards.casher.finding2Label">Client-Side Authentication Key Exposure:</strong> <span data-i18n="cards.casher.finding2"><code>signature_hash_key</code> is passed to the client and used to form <code>x-signature</code> authentication requests.</span></p>
+        <p><strong data-i18n="cards.casher.finding3Label">Potential IDOR / BOLA:</strong> <span data-i18n="cards.casher.finding3">API endpoints using <code>user_id</code> and <code>transaction_id</code> require server-side authorization checks.</span></p>
+        <p><strong data-i18n="cards.casher.finding4Label">Potential MQTT Cross-Account Access:</strong> <span data-i18n="cards.casher.finding4">User-specific MQTT topics require ACL validation against access to other users' data.</span></p>
+        <p><strong data-i18n="cards.casher.finding5Label">Potential XSS Sink:</strong> <span data-i18n="cards.casher.finding5"><code>innerHTML</code> is used when rendering notification content; exploitability requires additional verification.</span></p>
+      </div>
+    </article>
+
     <a href="vodka-casino.html" class="stack-card research-card reveal delay-3">
       <div class="stack-card__header">
         <span class="stack-card__tag">Research</span>
