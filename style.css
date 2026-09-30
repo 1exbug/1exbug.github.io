@@ -137,7 +137,7 @@ body::before {
 }
 .research-card:hover::after,.principle:hover::after,.method-card:hover::after { opacity:1; animation:cardSweep .9s ease forwards; }
 @keyframes cardSweep { to { transform:translateX(120%); } }
-.reveal { opacity:1; transform:none; filter:none; }
+.reveal { opacity:0; transform:translateY(38px) scale(.985); filter:blur(5px); }
 .reveal.visible { opacity:1; transform:none; filter:none; transition:opacity .8s cubic-bezier(.22,1,.36,1),transform 1s cubic-bezier(.22,1,.36,1),filter .8s ease; }
 .delay-1.visible{transition-delay:.08s}.delay-2.visible{transition-delay:.16s}.delay-3.visible{transition-delay:.24s}
 .hero-scanline { position:fixed; left:0; right:0; top:-2px; height:1px; background:linear-gradient(90deg,transparent,#b7ff5b,transparent); box-shadow:0 0 18px rgba(183,255,91,.6); opacity:.25; z-index:9996; pointer-events:none; }
@@ -152,4 +152,66 @@ body::before {
 @media (prefers-reduced-motion:reduce) {
   *,*::before,*::after { animation-duration:.001ms !important; animation-iteration-count:1 !important; scroll-behavior:auto !important; transition-duration:.001ms !important; }
   .reveal { opacity:1 !important; transform:none !important; filter:none !important; }
+}
+
+/* v23 stability, accessibility and responsive polish */
+html{scroll-behavior:smooth;scroll-padding-top:92px}
+body{background:var(--bg);color:var(--text);text-rendering:optimizeLegibility;-webkit-font-smoothing:antialiased}
+.skip-link{position:fixed;left:16px;top:10px;z-index:11000;transform:translateY(-150%);padding:9px 12px;border:1px solid var(--green);border-radius:6px;background:var(--panel);color:var(--text);font:10px "JetBrains Mono";transition:transform .2s}
+.skip-link:focus{transform:translateY(0)}
+section[id]{scroll-margin-top:92px}
+[hidden]{display:none!important}
+
+/* Motion is opt-in. Without GSAP (or with reduced motion), everything stays visible. */
+.reveal{opacity:1;transform:none;filter:none}
+.js-motion .reveal{opacity:0;transform:translateY(34px) scale(.985);filter:blur(5px)}
+.js-motion .reveal.is-visible{opacity:1;transform:none;filter:none}
+
+/* Reward blocks */
+.card-reward{display:inline-flex;align-items:center;gap:9px;margin-top:22px;padding:7px 10px;border:1px solid rgba(183,255,91,.24);border-radius:999px;background:rgba(183,255,91,.045)}
+.card-reward span{font:9px "JetBrains Mono";color:var(--muted);text-transform:uppercase;letter-spacing:.08em}
+.card-reward strong{font:700 11px "JetBrains Mono";color:var(--green)}
+.research-card.large .card-reward,.research-card:nth-child(2) .card-reward{position:relative;z-index:2}
+
+/* Make long disclosure cards breathe and remain clickable/legible. */
+.research-card.disclosure{min-height:320px}
+.research-card.disclosure .disclosure-note{max-width:760px}
+.research-card.disclosure .disclosure-note code{font-family:"JetBrains Mono";color:var(--soft)}
+
+/* Theme hardening: avoid dark fixed surfaces in light mode. */
+body.light .terminal,body.light .interactive-terminal{background:linear-gradient(145deg,#f1f7ef,#ffffff);box-shadow:0 25px 70px rgba(20,40,25,.12)}
+body.light .research-card{background:linear-gradient(145deg,#ffffff,#f1f6ef)}
+body.light .stats-grid article{background:linear-gradient(145deg,#ffffff,#f1f6ef)}
+body.light .terminal-content .dim,body.light .console-output .dim{color:#667468}
+body.light .orb-label{color:#081008}
+body.light .filter:hover,body.light .filter.active{color:#f7fff5}
+
+/* Better focus/keyboard behavior. */
+a:focus-visible,button:focus-visible,input:focus-visible{outline:2px solid var(--green);outline-offset:3px}
+button:disabled{opacity:.5;cursor:not-allowed}
+
+/* Reduce excessive compositor work on devices that cannot benefit from it. */
+@media (pointer:coarse){
+  .research-card,.principle,.method-card,.target-row,.bounty-row,.vuln-item{will-change:auto}
+  body::before{display:none}
+}
+@media (max-width:900px){
+  .nav{gap:14px}
+  .desktop-nav{display:none}
+  .nav-tools{margin-left:auto}
+  .stats-grid article{min-width:0}
+  .research-card.disclosure{min-height:0}
+  .card-reward{margin-top:18px}
+}
+@media (max-width:600px){
+  .nav{height:64px}
+  section[id]{scroll-margin-top:76px}
+  html{scroll-padding-top:76px}
+  .lang-switch{padding:3px 5px}
+  .round-btn{width:32px;height:32px}
+  .hero-actions{flex-wrap:wrap}
+  .hero-actions .btn{justify-content:space-between}
+  .research-card.disclosure{padding-bottom:24px}
+  .card-reward{max-width:100%;overflow:hidden}
+  .card-reward strong{white-space:nowrap}
 }

@@ -4,15 +4,17 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="theme-color" content="#050705">
+<meta name="color-scheme" content="dark light">
 <meta name="description" content="1exbug — independent security research portfolio. Web, API, authentication, access control and business logic.">
 <title>1exbug — Security Researcher</title>
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="style.css?v=20260930">
 </head>
 <body>
+<a class="skip-link" href="#main-content">Skip to content</a>
 <div class="scroll-progress" id="progress"></div>
 <div class="ambient a1"></div><div class="ambient a2"></div>
 <div class="grain"></div>
@@ -34,8 +36,8 @@
     <div class="lang-switch" aria-label="Language">
       <button id="langEN" class="lang active">EN</button><span>/</span><button id="langRU" class="lang">RU</button>
     </div>
-    <button class="round-btn" id="themeToggle" title="Toggle theme" aria-label="Toggle theme">◐</button>
-    <button class="menu-btn round-btn" id="menuBtn" aria-label="Menu">☰</button>
+    <button class="round-btn" id="themeToggle" title="Toggle theme" aria-label="Toggle theme" aria-pressed="false">◐</button>
+    <button class="menu-btn round-btn" id="menuBtn" aria-label="Open menu" aria-controls="mobilePanel" aria-expanded="false">☰</button>
   </div>
 </header>
 
@@ -43,9 +45,9 @@
   <a href="#about" data-i18n="nav.about">About</a><a href="#research" data-i18n="nav.research">Research</a><a href="#stats" data-i18n="nav.stats">Stats</a><a href="#scam" data-i18n="nav.scam">SCAM</a><a href="#method" data-i18n="nav.method">Method</a><a href="#stack" data-i18n="nav.stack">Stack</a><a href="#contact" data-i18n="nav.contact">Contact</a>
 </div>
 
-<main>
+<main id="main-content">
 <section class="hero" id="home">
-  <div class="hero-copy reveal">
+  <div class="hero-copy">
     <div class="status-line"><i></i><span data-i18n="hero.status">Independent security research</span><b>2026</b></div>
     <p class="hero-index">01 / PORTFOLIO</p>
     <h1>Break the<br><span class="outline">expected.</span></h1>
@@ -57,7 +59,7 @@
     <div class="hero-foot"><span>WEB / API / AUTH / LOGIC</span><span>RESPONSIBLE DISCLOSURE</span></div>
   </div>
 
-  <div class="hero-visual reveal delay-2">
+  <div class="hero-visual">
     <div class="orb"><div class="orb-core"></div><span class="orb-label">01EX</span><span class="orb-ring r1"></span><span class="orb-ring r2"></span></div>
     <div class="terminal">
       <div class="terminal-bar"><span><i></i><i></i><i></i></span><em>research@1exbug</em><button id="copyTerminal">⧉</button></div>
@@ -73,9 +75,19 @@
 
 <section class="metrics">
   <div><strong>16</strong><span data-i18n="metrics.findings">documented findings</span></div>
-  <div><strong>07</strong><span data-i18n="metrics.targets">referenced targets</span></div>
+  <div><strong>09</strong><span data-i18n="metrics.targets">research targets</span></div>
   <div><strong>03</strong><span data-i18n="metrics.focus">core focus areas</span></div>
   <div><strong>02</strong><span data-i18n="metrics.writeups">public write-ups</span></div>
+</section>
+
+<section class="section stats-section" id="stats">
+  <div class="section-head reveal"><span>02A</span><div><small data-i18n="labels.stats">SECURITY STATS</small><h2 data-i18n="stats.title">Research at a glance.</h2></div></div>
+  <div class="stats-grid reveal">
+    <article><span>01</span><strong>16</strong><b data-i18n="stats.findings">documented findings</b></article>
+    <article><span>02</span><strong>09</strong><b data-i18n="stats.targets">research targets</b></article>
+    <article><span>03</span><strong>200K ₽</strong><b data-i18n="stats.payout">largest listed payout</b></article>
+    <article><span>04</span><strong>02</strong><b data-i18n="stats.writeups">public write-ups</b></article>
+  </div>
 </section>
 
 <section class="section" id="about">
@@ -99,6 +111,7 @@
       <h3 data-i18n="cards.slots.title">Authentication & account logic</h3>
       <p data-i18n="cards.slots.text">Authentication, session and account-control issues documented across the application.</p>
       <div class="tags"><span>No rate limit</span><span>2FA</span><span>Session IDOR</span><span>Password reset</span></div>
+      <div class="card-reward"><span data-i18n="cards.slots.rewardLabel">Выплата</span><strong>200 000 ₽</strong></div>
       <a href="writeup-1xslots.html" class="read-link"><span data-i18n="read">Read write-up</span><b>↗</b></a>
     </article>
     <article class="research-card reveal delay-1" data-tilt>
@@ -107,6 +120,7 @@
       <h3 data-i18n="cards.onx.title">Authorization & business logic</h3>
       <p data-i18n="cards.onx.text">KYC, payout, balance, race-condition and WebSocket access-control findings.</p>
       <div class="tags"><span>KYC</span><span>IDOR</span><span>Race</span><span>WebSocket</span></div>
+      <div class="card-reward"><span data-i18n="cards.onx.rewardLabel">Выплата</span><strong>75 000 ₽</strong></div>
       <a href="writeup-onx.html" class="read-link"><span data-i18n="read">Read write-up</span><b>↗</b></a>
     </article>
     <article class="research-card disclosure reveal delay-2">
@@ -187,12 +201,12 @@
     <button class="filter" data-filter="race">RACE</button>
   </div>
   <div class="vuln-matrix reveal">
-    <div class="vuln-item" data-vuln="auth"><span>01</span><strong>Authentication</strong><em>05</em></div>
-    <div class="vuln-item" data-vuln="idor"><span>02</span><strong>IDOR / BOLA</strong><em>06</em></div>
-    <div class="vuln-item" data-vuln="xss"><span>03</span><strong>XSS</strong><em>04</em></div>
-    <div class="vuln-item" data-vuln="race"><span>04</span><strong>Race Conditions</strong><em>03</em></div>
-    <div class="vuln-item" data-vuln="ws"><span>05</span><strong>WebSockets</strong><em>04</em></div>
-    <div class="vuln-item" data-vuln="auth"><span>06</span><strong>Session Security</strong><em>03</em></div>
+    <div class="vuln-item" data-vuln="auth"><span>01</span><strong>Authentication</strong><em>AUTH</em></div>
+    <div class="vuln-item" data-vuln="idor"><span>02</span><strong>IDOR / BOLA</strong><em>ACL</em></div>
+    <div class="vuln-item" data-vuln="xss"><span>03</span><strong>XSS</strong><em>XSS</em></div>
+    <div class="vuln-item" data-vuln="race"><span>04</span><strong>Race Conditions</strong><em>RACE</em></div>
+    <div class="vuln-item" data-vuln="ws"><span>05</span><strong>WebSockets</strong><em>WS</em></div>
+    <div class="vuln-item" data-vuln="auth"><span>06</span><strong>Session Security</strong><em>SESS</em></div>
   </div>
 </section>
 
@@ -200,7 +214,7 @@
   <div class="section-head reveal"><span>05B</span><div><small data-i18n="labels.console">RESEARCH CONSOLE</small><h2 data-i18n="console.title">Talk to the terminal.</h2></div></div>
   <div class="interactive-terminal reveal">
     <div class="terminal-bar"><span><i></i><i></i><i></i></span><em>1exbug@research:~</em></div>
-    <div class="console-output" id="consoleOutput"><p><b>1exbug@research:~$</b> <span>help</span></p><p class="dim">about · findings · targets · contact · clear</p></div>
+    <div class="console-output" id="consoleOutput"><p><b>1exbug@research:~$</b> <span>help</span></p><p class="dim">about · findings · targets · payouts · contact · status · clear</p></div>
     <form id="consoleForm"><span>1exbug@research:~$</span><input id="consoleInput" autocomplete="off" spellcheck="false" aria-label="Terminal command" data-i18n-placeholder="console.placeholder" placeholder="type a command..." /></form>
   </div>
 </section>
@@ -224,8 +238,8 @@
   <div class="bounty-table reveal">
     <div class="bounty-row head"><span data-i18n="bounty.target">Target</span><span data-i18n="bounty.issue">Issue</span><span data-i18n="bounty.amount">Amount</span><span data-i18n="bounty.status">Status</span></div>
     <div class="bounty-row"><strong>Zooma Casino</strong><span>XSS / winnerName</span><b>35 000 ₽</b><em data-i18n="bounty.offered">offered</em></div>
-    <div class="bounty-row"><strong>1xSlots</strong><span data-i18n="bounty.pendingIssue">multiple findings</span><b>—</b><em data-i18n="bounty.documented">documented</em></div>
-    <div class="bounty-row"><strong>ON-X Casino</strong><span data-i18n="bounty.pendingIssue">multiple findings</span><b>—</b><em data-i18n="bounty.documented">documented</em></div>
+    <div class="bounty-row"><strong>1xSlots</strong><span data-i18n="bounty.pendingIssue">multiple findings</span><b>200 000 ₽</b><em data-i18n="bounty.recorded">payout recorded</em></div>
+    <div class="bounty-row"><strong>ON-X Casino</strong><span data-i18n="bounty.pendingIssue">multiple findings</span><b>75 000 ₽</b><em data-i18n="bounty.recorded">payout recorded</em></div>
   </div>
 </section>
 
@@ -250,7 +264,7 @@
   <div class="contact-inner reveal">
     <div><small data-i18n="labels.contact">CONTACT</small><h2 data-i18n="contact.title">Let's talk security.</h2><p data-i18n="contact.text">Responsible disclosure, research collaboration or a technical question — choose a channel.</p></div>
     <div class="contact-links">
-      <a href="https://t.me/1exbug" target="_blank" rel="noopener"><span>Telegram</span><b>↗</b></a>
+      <a href="https://t.me/onexbug" target="_blank" rel="noopener"><span>Telegram</span><b>↗</b></a>
       <a href="https://github.com/1exbug" target="_blank" rel="noopener"><span>GitHub</span><b>↗</b></a>
       <button id="copyEmail"><span>onexbugs@gmail.com</span><b>⧉</b></button>
     </div>
@@ -263,8 +277,7 @@
 
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/ScrollTrigger.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/lenis@1.3.8/dist/lenis.min.js"></script>
-<script src="lang.js"></script>
-<script src="script.js"></script>
+<script src="lang.js?v=20260930"></script>
+<script src="script.js?v=20260930"></script>
 </body>
 </html>
