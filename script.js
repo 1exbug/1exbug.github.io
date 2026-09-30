@@ -239,13 +239,13 @@
       // Make all motion elements start from a known state. If GSAP itself is unavailable,
       // the .js-motion class is never added, so the page remains fully visible.
       const reveals = gsap.utils.toArray('.reveal');
-      gsap.set(reveals, { autoAlpha: 0, y: 34, scale: 0.985, filter: 'blur(5px)' });
+      gsap.set(reveals, { autoAlpha: 0, y: 24, scale: 0.99 });
 
       const heroTl = gsap.timeline({ defaults: { ease: 'power4.out' } });
       heroTl
         .fromTo('.hero-copy .status-line', { y: 18, autoAlpha: 0 }, { y: 0, autoAlpha: 1, duration: .7 })
         .fromTo('.hero-index', { y: 20, autoAlpha: 0 }, { y: 0, autoAlpha: 1, duration: .55 }, '-=.4')
-        .fromTo('.hero h1', { y: 52, autoAlpha: 0, filter: 'blur(12px)' }, { y: 0, autoAlpha: 1, filter: 'blur(0px)', duration: 1 }, '-=.35')
+        .fromTo('.hero h1', { y: 52, autoAlpha: 0 }, { y: 0, autoAlpha: 1, duration: .85 }, '-=.35')
         .fromTo('.hero-sub', { y: 22, autoAlpha: 0 }, { y: 0, autoAlpha: 1, duration: .65 }, '-=.55')
         .fromTo('.hero-actions .btn', { y: 18, autoAlpha: 0 }, { y: 0, autoAlpha: 1, duration: .5, stagger: .07 }, '-=.42')
         .fromTo('.hero-foot', { y: 12, autoAlpha: 0 }, { y: 0, autoAlpha: 1, duration: .45 }, '-=.3')
@@ -257,11 +257,10 @@
           autoAlpha: 1,
           y: 0,
           scale: 1,
-          filter: 'blur(0px)',
           duration: .8,
           delay: (index % 4) * .055,
           ease: 'power3.out',
-          clearProps: 'filter,transform',
+          clearProps: 'transform,opacity,visibility',
           scrollTrigger: {
             trigger: element,
             start: 'top 91%',
