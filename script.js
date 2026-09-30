@@ -230,145 +230,129 @@
     consoleInput?.focus();
   });
 
-  /* ---------- cinematic motion ---------- */
-  if (!reducedMotion && window.gsap && window.ScrollTrigger) {
-    try {
-      body.classList.add('js-motion');
-      gsap.registerPlugin(ScrollTrigger);
+  /* ---------- dependency-free motion ---------- */
+  // The page is intentionally fail-open: CSS keeps every content block visible.
+  // Motion is an enhancement only and never controls whether content is rendered.
+  const motionElements = $$('.reveal');
+  const addMotion = (element, delay = 0) => {
+    if (!element || element.dataset.motionDone === '1') return;
+    element.dataset.motionDone = '1';
+    element.style.setProperty('--motion-delay', `${delay}ms`);
+    requestAnimationFrame(() => element.classList.add('in-view'));
+  };
 
-      // Make all motion elements start from a known state. If GSAP itself is unavailable,
-      // the .js-motion class is never added, so the page remains fully visible.
-      const reveals = gsap.utils.toArray('.reveal');
-      gsap.set(reveals, { autoAlpha: 0, y: 24, scale: 0.99 });
-
-      const heroTl = gsap.timeline({ defaults: { ease: 'power4.out' } });
-      heroTl
-        .fromTo('.hero-copy .status-line', { y: 18, autoAlpha: 0 }, { y: 0, autoAlpha: 1, duration: .7 })
-        .fromTo('.hero-index', { y: 20, autoAlpha: 0 }, { y: 0, autoAlpha: 1, duration: .55 }, '-=.4')
-        .fromTo('.hero h1', { y: 52, autoAlpha: 0 }, { y: 0, autoAlpha: 1, duration: .85 }, '-=.35')
-        .fromTo('.hero-sub', { y: 22, autoAlpha: 0 }, { y: 0, autoAlpha: 1, duration: .65 }, '-=.55')
-        .fromTo('.hero-actions .btn', { y: 18, autoAlpha: 0 }, { y: 0, autoAlpha: 1, duration: .5, stagger: .07 }, '-=.42')
-        .fromTo('.hero-foot', { y: 12, autoAlpha: 0 }, { y: 0, autoAlpha: 1, duration: .45 }, '-=.3')
-        .fromTo('.hero-visual', { x: 48, autoAlpha: 0, scale: .94, rotateY: -7 }, { x: 0, autoAlpha: 1, scale: 1, rotateY: 0, duration: 1.05 }, '-=.85');
-
-      // Standard scroll reveals. One trigger per element keeps layout calculations simple and robust.
-      reveals.forEach((element, index) => {
-        gsap.to(element, {
-          autoAlpha: 1,
-          y: 0,
-          scale: 1,
-          duration: .8,
-          delay: (index % 4) * .055,
-          ease: 'power3.out',
-          clearProps: 'transform,opacity,visibility',
-          scrollTrigger: {
-            trigger: element,
-            start: 'top 91%',
-            once: true,
-            invalidateOnRefresh: true
-          }
-        });
+  if (!reducedMotion && 'IntersectionObserver' in window) {
+    const motionObserver = new IntersectionObserver((entries, observer) => {
+      entries.forEach(entry => {
+        if (!entry.isIntersecting) return;
+        const index = motionElements.indexOf(entry.target);
+        addMotion(entry.target, (index >= 0 ? index % 4 : 0) * 55);
+        observer.unobserve(entry.target);
       });
+    }, { rootMargin: '0px 0px -8% 0px', threshold: 0.06 });
+    motionElements.forEach(el => motionObserver.observe(el));
+  } else {
+    motionElements.forEach(el => addMotion(el, 0));
+  }
 
-      // Gentle parallax only on the hero; no scroll hijacking.
-      gsap.to('.hero-visual', {
-        yPercent: -7,
-        rotateZ: .6,
-        ease: 'none',
-        scrollTrigger: { trigger: '.hero', start: 'top top', end: 'bottom top', scrub: 1.2 }
-      });
-      gsap.to('.hero-copy', {
-        yPercent: -4,
-        ease: 'none',
-        scrollTrigger: { trigger: '.hero', start: 'top top', end: 'bottom top', scrub: 1.5 }
-      });
-      gsap.to('.hero-scanline', {
-        y: () => window.innerHeight * 1.1,
-        ease: 'none',
-        scrollTrigger: { start: 0, end: () => Math.max(1, document.documentElement.scrollHeight - window.innerHeight), scrub: true }
-      });
+  // Hero entrance runs only after content is already renderable.
+  if (!reducedMotion) {
+    requestAnimationFrame(() => document.body.classList.add('page-ready'));
+  } else {
+    document.body.classList.add('motion-reduced');
+  }
 
-      // Desktop-only tilt. matchMedia automatically reverts these transforms when the breakpoint changes.
-      const mm = gsap.matchMedia();
-      mm.add('(min-width: 901px) and (pointer: fine)', () => {
-        document.querySelectorAll('[data-tilt]').forEach(card => {
-          const setX = gsap.quickTo(card, 'rotateX', { duration: .35, ease: 'power3.out' });
-          const setY = gsap.quickTo(card, 'rotateY', { duration: .35, ease: 'power3.out' });
-          const setZ = gsap.quickTo(card, 'z', { duration: .35, ease: 'power3.out' });
-          const move = (event) => {
-            const rect = card.getBoundingClientRect();
-            const x = (event.clientX - rect.left) / rect.width - .5;
-            const y = (event.clientY - rect.top) / rect.height - .5;
-            setX(-y * 4.2);
-            setY(x * 5.5);
-            setZ(10);
-          };
-          const leave = () => {
-            setX(0); setY(0); setZ(0);
-          };
-          card.addEventListener('pointermove', move, { passive: true });
-          card.addEventListener('pointerleave', leave, { passive: true });
-        });
-      });
+  // Lightweight hero parallax using rAF; no scroll hijacking and no dependencies.
+  const hero = $('.hero');
+  const heroCopy = $('.hero-copy');
+  const heroVisual = $('.hero-visual');
+  let parallaxTick = false;
+  const updateParallax = () => {
+    parallaxTick = false;
+    if (reducedMotion || !hero) return;
+    const y = Math.min(window.scrollY, Math.max(0, hero.offsetHeight));
+    const factor = Math.min(1, y / Math.max(1, hero.offsetHeight));
+    if (heroCopy) heroCopy.style.setProperty('--parallax-y', `${(-factor * 22).toFixed(1)}px`);
+    if (heroVisual) heroVisual.style.setProperty('--parallax-y', `${(-factor * 34).toFixed(1)}px`);
+  };
+  const onParallaxScroll = () => {
+    if (parallaxTick) return;
+    parallaxTick = true;
+    requestAnimationFrame(updateParallax);
+  };
+  addEventListener('scroll', onParallaxScroll, { passive: true });
+  updateParallax();
 
-      // Magnetic interactions for major CTAs only.
-      $$('.hero-actions .btn, .contact-links a, .contact-links button').forEach(button => {
-        const move = (event) => {
-          const rect = button.getBoundingClientRect();
-          const x = (event.clientX - rect.left - rect.width / 2) * .11;
-          const y = (event.clientY - rect.top - rect.height / 2) * .11;
-          gsap.to(button, { x, y, duration: .3, ease: 'power3.out', overwrite: true });
-        };
-        const leave = () => gsap.to(button, { x: 0, y: 0, duration: .55, ease: 'elastic.out(1,.5)', overwrite: true });
-        button.addEventListener('pointermove', move, { passive: true });
-        button.addEventListener('pointerleave', leave, { passive: true });
-      });
+  // Desktop card tilt with CSS custom properties only.
+  if (!reducedMotion && matchMedia('(pointer: fine)').matches && innerWidth >= 901) {
+    $$('[data-tilt]').forEach(card => {
+      const move = event => {
+        const rect = card.getBoundingClientRect();
+        if (!rect.width || !rect.height) return;
+        const x = (event.clientX - rect.left) / rect.width - 0.5;
+        const y = (event.clientY - rect.top) / rect.height - 0.5;
+        card.style.setProperty('--rx', `${(-y * 3.2).toFixed(2)}deg`);
+        card.style.setProperty('--ry', `${(x * 4.2).toFixed(2)}deg`);
+        card.style.setProperty('--tz', '7px');
+      };
+      const leave = () => {
+        card.style.setProperty('--rx', '0deg');
+        card.style.setProperty('--ry', '0deg');
+        card.style.setProperty('--tz', '0px');
+      };
+      card.addEventListener('pointermove', move, { passive: true });
+      card.addEventListener('pointerleave', leave, { passive: true });
+    });
+  }
 
-      // Custom cursor, desktop only.
-      const dot = $('#cursorDot');
-      const ring = $('#cursorRing');
-      if (dot && ring && matchMedia('(pointer: fine)').matches) {
-        let mouseX = window.innerWidth / 2;
-        let mouseY = window.innerHeight / 2;
-        let ringX = mouseX;
-        let ringY = mouseY;
-        const moveCursor = (event) => {
-          mouseX = event.clientX;
-          mouseY = event.clientY;
-          body.style.setProperty('--mx', `${mouseX}px`);
-          body.style.setProperty('--my', `${mouseY}px`);
-          dot.style.opacity = '1';
-          ring.style.opacity = '1';
-          dot.style.transform = `translate3d(${mouseX}px,${mouseY}px,0) translate(-50%,-50%)`;
-        };
-        addEventListener('pointermove', moveCursor, { passive: true });
-        const cursorFrame = () => {
-          ringX += (mouseX - ringX) * .16;
-          ringY += (mouseY - ringY) * .16;
-          ring.style.transform = `translate3d(${ringX}px,${ringY}px,0) translate(-50%,-50%)`;
-          requestAnimationFrame(cursorFrame);
-        };
-        requestAnimationFrame(cursorFrame);
-        $$('a, button, input, [data-tilt]').forEach(element => {
-          element.addEventListener('pointerenter', () => ring.classList.add('hover'));
-          element.addEventListener('pointerleave', () => ring.classList.remove('hover'));
-        });
-      }
+  // Magnetic effect for primary actions only.
+  if (!reducedMotion && matchMedia('(pointer: fine)').matches) {
+    $$('.hero-actions .btn, .contact-links a, .contact-links button').forEach(button => {
+      const move = event => {
+        const rect = button.getBoundingClientRect();
+        const x = (event.clientX - rect.left - rect.width / 2) * 0.08;
+        const y = (event.clientY - rect.top - rect.height / 2) * 0.08;
+        button.style.setProperty('--mx-btn', `${x.toFixed(1)}px`);
+        button.style.setProperty('--my-btn', `${y.toFixed(1)}px`);
+      };
+      const leave = () => {
+        button.style.setProperty('--mx-btn', '0px');
+        button.style.setProperty('--my-btn', '0px');
+      };
+      button.addEventListener('pointermove', move, { passive: true });
+      button.addEventListener('pointerleave', leave, { passive: true });
+    });
+  }
 
-      // GSAP calculates trigger positions from the rendered layout; refresh after fonts/layout settle.
-      addEventListener('load', () => window.requestAnimationFrame(() => ScrollTrigger.refresh(true)), { once: true });
-      setTimeout(() => ScrollTrigger.refresh(true), 250);
-      setTimeout(() => ScrollTrigger.refresh(true), 900);
-    } catch (error) {
-      console.warn('Motion engine fallback:', error);
-      body.classList.remove('js-motion');
-      $$('.reveal').forEach(element => {
-        element.style.removeProperty('opacity');
-        element.style.removeProperty('visibility');
-        element.style.removeProperty('transform');
-        element.style.removeProperty('filter');
-      });
-    }
+  // Custom cursor is purely decorative and never required for interaction.
+  const dot = $('#cursorDot');
+  const ring = $('#cursorRing');
+  if (!reducedMotion && dot && ring && matchMedia('(pointer: fine)').matches) {
+    let mouseX = innerWidth / 2, mouseY = innerHeight / 2;
+    let ringX = mouseX, ringY = mouseY;
+    const moveCursor = event => {
+      mouseX = event.clientX;
+      mouseY = event.clientY;
+      body.style.setProperty('--mx', `${mouseX}px`);
+      body.style.setProperty('--my', `${mouseY}px`);
+      dot.style.opacity = '1';
+      ring.style.opacity = '1';
+      dot.style.left = `${mouseX}px`;
+      dot.style.top = `${mouseY}px`;
+    };
+    addEventListener('pointermove', moveCursor, { passive: true });
+    const cursorFrame = () => {
+      ringX += (mouseX - ringX) * 0.16;
+      ringY += (mouseY - ringY) * 0.16;
+      ring.style.left = `${ringX}px`;
+      ring.style.top = `${ringY}px`;
+      requestAnimationFrame(cursorFrame);
+    };
+    requestAnimationFrame(cursorFrame);
+    $$('a, button, input, [data-tilt]').forEach(element => {
+      element.addEventListener('pointerenter', () => ring.classList.add('hover'));
+      element.addEventListener('pointerleave', () => ring.classList.remove('hover'));
+    });
   }
 
   /* Ensure anchors work even when a script or animation library fails. */
