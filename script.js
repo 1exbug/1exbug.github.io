@@ -86,13 +86,13 @@ consoleForm?.addEventListener('submit',e=>{
 
   // Scroll-linked depth and section choreography.
   gsap.utils.toArray('.section-head').forEach((head)=>{
-    gsap.from(head.querySelector('h2'),{scrollTrigger:{trigger:head,start:'top 88%',once:true},y:28,opacity:0,clipPath:'inset(100% 0 0 0)',duration:.85,ease:'power3.out'});
+    gsap.fromTo(head.querySelector('h2'),{y:28,opacity:0,clipPath:'inset(100% 0 0 0)'},{scrollTrigger:{trigger:head,start:'top 88%',once:true},y:0,opacity:1,clipPath:'inset(0% 0 0 0)',duration:.85,ease:'power3.out',immediateRender:false});
   });
   gsap.utils.toArray('.metrics > div').forEach((el,i)=>{
-    gsap.from(el,{scrollTrigger:{trigger:'.metrics',start:'top 90%',once:true},y:30,opacity:0,scale:.9,duration:.7,delay:i*.08,ease:'back.out(1.7)'});
+    gsap.fromTo(el,{y:30,opacity:0,scale:.9},{scrollTrigger:{trigger:'.metrics',start:'top 90%',once:true},y:0,opacity:1,scale:1,duration:.7,delay:i*.08,ease:'back.out(1.7)',immediateRender:false});
   });
   gsap.utils.toArray('.research-card,.principle,.method-card,.target-row,.bounty-row,.vuln-item').forEach((el,i)=>{
-    gsap.from(el,{scrollTrigger:{trigger:el,start:'top 92%',once:true},y:42,opacity:0,rotateX:5,transformPerspective:900,duration:.8,delay:(i%4)*.06,ease:'power3.out'});
+    gsap.fromTo(el,{y:42,opacity:0,rotateX:5,transformPerspective:900},{scrollTrigger:{trigger:el,start:'top 92%',once:true},y:0,opacity:1,rotateX:0,duration:.8,delay:(i%4)*.06,ease:'power3.out',immediateRender:false});
   });
 
   // Subtle hero parallax; no scroll hijacking.
@@ -118,3 +118,6 @@ consoleForm?.addEventListener('submit',e=>{
     card.addEventListener('pointerleave',()=>gsap.to(card,{rotateX:0,rotateY:0,z:0,duration:.8,ease:'elastic.out(1,.55)'}));
   });
 })();
+
+// Keep ScrollTrigger positions correct after fonts/layout settle.
+window.addEventListener('load',()=>{ if(window.ScrollTrigger) ScrollTrigger.refresh(true); });

@@ -137,7 +137,7 @@ body::before {
 }
 .research-card:hover::after,.principle:hover::after,.method-card:hover::after { opacity:1; animation:cardSweep .9s ease forwards; }
 @keyframes cardSweep { to { transform:translateX(120%); } }
-.reveal { opacity:0; transform:translateY(38px) scale(.985); filter:blur(5px); }
+.reveal { opacity:1; transform:none; filter:none; }
 .reveal.visible { opacity:1; transform:none; filter:none; transition:opacity .8s cubic-bezier(.22,1,.36,1),transform 1s cubic-bezier(.22,1,.36,1),filter .8s ease; }
 .delay-1.visible{transition-delay:.08s}.delay-2.visible{transition-delay:.16s}.delay-3.visible{transition-delay:.24s}
 .hero-scanline { position:fixed; left:0; right:0; top:-2px; height:1px; background:linear-gradient(90deg,transparent,#b7ff5b,transparent); box-shadow:0 0 18px rgba(183,255,91,.6); opacity:.25; z-index:9996; pointer-events:none; }
