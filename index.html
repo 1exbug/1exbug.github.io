@@ -22,6 +22,7 @@
   <nav class="desktop-nav" id="desktopNav">
     <a href="#about" data-i18n="nav.about">About</a>
     <a href="#research" data-i18n="nav.research">Research</a>
+    <a href="#stats" data-i18n="nav.stats">Stats</a>
     <a href="#scam" data-i18n="nav.scam">SCAM</a>
     <a href="#method" data-i18n="nav.method">Method</a>
     <a href="#stack" data-i18n="nav.stack">Stack</a>
@@ -37,7 +38,7 @@
 </header>
 
 <div class="mobile-panel" id="mobilePanel">
-  <a href="#about" data-i18n="nav.about">About</a><a href="#research" data-i18n="nav.research">Research</a><a href="#method" data-i18n="nav.method">Method</a><a href="#stack" data-i18n="nav.stack">Stack</a><a href="#contact" data-i18n="nav.contact">Contact</a>
+  <a href="#about" data-i18n="nav.about">About</a><a href="#research" data-i18n="nav.research">Research</a><a href="#stats" data-i18n="nav.stats">Stats</a><a href="#scam" data-i18n="nav.scam">SCAM</a><a href="#method" data-i18n="nav.method">Method</a><a href="#stack" data-i18n="nav.stack">Stack</a><a href="#contact" data-i18n="nav.contact">Contact</a>
 </div>
 
 <main>
@@ -150,6 +151,15 @@
   </div>
 </section>
 
+<section class="section timeline-section" id="timeline">
+  <div class="section-head reveal"><span>04A</span><div><small data-i18n="labels.timeline">TIMELINE</small><h2 data-i18n="timeline.title">Research history.</h2></div></div>
+  <div class="timeline reveal">
+    <article><time>23.09.2026</time><div><strong>Zooma Casino</strong><span data-i18n="timeline.zooma">Research permission received.</span></div></article>
+    <article><time>26.09.2026</time><div><strong>MoneyX Casino</strong><span data-i18n="timeline.moneyx">Responsible disclosure sent.</span></div></article>
+    <article><time>30.09.2026</time><div><strong>Casher</strong><span data-i18n="timeline.casher">Security findings reported.</span></div></article>
+  </div>
+</section>
+
 <section class="section scam-section" id="scam">
   <div class="section-head reveal"><span>04</span><div><small data-i18n="labels.scam">SCAM WATCH</small><h2 data-i18n="scam.title">Unresolved disclosures.</h2></div></div>
   <div class="scam-note reveal"><span class="scam-mark">!</span><p data-i18n="scam.note">This table records unresolved disclosure communication only. A SCAM label is not a verified accusation; entries are based on documented contact status and are subject to update.</p></div>
@@ -164,8 +174,37 @@
   </div>
 </section>
 
+<section class="section vuln-section" id="vulns">
+  <div class="section-head reveal"><span>05A</span><div><small data-i18n="labels.vulns">VULNERABILITY MATRIX</small><h2 data-i18n="vulns.title">What gets tested.</h2></div></div>
+  <div class="filter-bar reveal" id="vulnFilters">
+    <button class="filter active" data-filter="all" data-i18n="vulns.all">ALL</button>
+    <button class="filter" data-filter="xss">XSS</button>
+    <button class="filter" data-filter="idor">IDOR / BOLA</button>
+    <button class="filter" data-filter="auth">AUTH</button>
+    <button class="filter" data-filter="ws">WEBSOCKET</button>
+    <button class="filter" data-filter="race">RACE</button>
+  </div>
+  <div class="vuln-matrix reveal">
+    <div class="vuln-item" data-vuln="auth"><span>01</span><strong>Authentication</strong><em>05</em></div>
+    <div class="vuln-item" data-vuln="idor"><span>02</span><strong>IDOR / BOLA</strong><em>06</em></div>
+    <div class="vuln-item" data-vuln="xss"><span>03</span><strong>XSS</strong><em>04</em></div>
+    <div class="vuln-item" data-vuln="race"><span>04</span><strong>Race Conditions</strong><em>03</em></div>
+    <div class="vuln-item" data-vuln="ws"><span>05</span><strong>WebSockets</strong><em>04</em></div>
+    <div class="vuln-item" data-vuln="auth"><span>06</span><strong>Session Security</strong><em>03</em></div>
+  </div>
+</section>
+
+<section class="section terminal-section" id="console">
+  <div class="section-head reveal"><span>05B</span><div><small data-i18n="labels.console">RESEARCH CONSOLE</small><h2 data-i18n="console.title">Talk to the terminal.</h2></div></div>
+  <div class="interactive-terminal reveal">
+    <div class="terminal-bar"><span><i></i><i></i><i></i></span><em>1exbug@research:~</em></div>
+    <div class="console-output" id="consoleOutput"><p><b>1exbug@research:~$</b> <span>help</span></p><p class="dim">about · findings · targets · contact · clear</p></div>
+    <form id="consoleForm"><span>1exbug@research:~$</span><input id="consoleInput" autocomplete="off" spellcheck="false" aria-label="Terminal command" data-i18n-placeholder="console.placeholder" placeholder="type a command..." /></form>
+  </div>
+</section>
+
 <section class="section targets-section" id="targets">
-  <div class="section-head reveal"><span>04</span><div><small data-i18n="labels.targets">TARGETS</small><h2 data-i18n="targets.title">Research surface.</h2></div></div>
+  <div class="section-head reveal"><span>05</span><div><small data-i18n="labels.targets">TARGETS</small><h2 data-i18n="targets.title">Research surface.</h2></div></div>
   <div class="target-table reveal">
     <div class="target-row head"><span>#</span><span data-i18n="targets.target">Target</span><span data-i18n="targets.state">State</span><span></span></div>
     <a class="target-row clickable" href="writeup-1xslots.html"><span>01</span><strong>1xSlots</strong><em>documented</em><b>↗</b></a>
@@ -178,8 +217,18 @@
   </div>
 </section>
 
+<section class="section bounty-section" id="bounty">
+  <div class="section-head reveal"><span>06A</span><div><small data-i18n="labels.bounty">BOUNTY HISTORY</small><h2 data-i18n="bounty.title">Disclosure outcomes.</h2></div></div>
+  <div class="bounty-table reveal">
+    <div class="bounty-row head"><span data-i18n="bounty.target">Target</span><span data-i18n="bounty.issue">Issue</span><span data-i18n="bounty.amount">Amount</span><span data-i18n="bounty.status">Status</span></div>
+    <div class="bounty-row"><strong>Zooma Casino</strong><span>XSS / winnerName</span><b>35 000 ₽</b><em data-i18n="bounty.offered">offered</em></div>
+    <div class="bounty-row"><strong>1xSlots</strong><span data-i18n="bounty.pendingIssue">multiple findings</span><b>—</b><em data-i18n="bounty.documented">documented</em></div>
+    <div class="bounty-row"><strong>ON-X Casino</strong><span data-i18n="bounty.pendingIssue">multiple findings</span><b>—</b><em data-i18n="bounty.documented">documented</em></div>
+  </div>
+</section>
+
 <section class="section method-section" id="method">
-  <div class="section-head reveal"><span>06</span><div><small data-i18n="labels.method">METHOD</small><h2 data-i18n="method.title">Map. Model. Break. Prove.</h2></div></div>
+  <div class="section-head reveal"><span>07</span><div><small data-i18n="labels.method">METHOD</small><h2 data-i18n="method.title">Map. Model. Break. Prove.</h2></div></div>
   <div class="method-grid">
     <article class="method-card reveal"><span>01</span><h3 data-i18n="method.m1h">Map</h3><p data-i18n="method.m1p">Routes, APIs, parameters, roles, tokens and application state.</p></article>
     <article class="method-card reveal delay-1"><span>02</span><h3 data-i18n="method.m2h">Model</h3><p data-i18n="method.m2p">Trust boundaries, assumptions and what the server actually verifies.</p></article>
@@ -189,7 +238,7 @@
 </section>
 
 <section class="section stack-section" id="stack">
-  <div class="section-head reveal"><span>07</span><div><small data-i18n="labels.stack">STACK</small><h2 data-i18n="stack.title">Tools & focus.</h2></div></div>
+  <div class="section-head reveal"><span>08</span><div><small data-i18n="labels.stack">STACK</small><h2 data-i18n="stack.title">Tools & focus.</h2></div></div>
   <div class="stack-list reveal">
     <span>Web Security</span><span>API Testing</span><span>Authentication</span><span>Authorization</span><span>IDOR</span><span>Business Logic</span><span>Race Conditions</span><span>WebSockets</span><span>XSS</span><span>Session Security</span><span>Burp Suite</span><span>DevTools</span><span>HTTP</span><span>JavaScript</span><span>Linux</span>
   </div>

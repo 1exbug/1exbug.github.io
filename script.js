@@ -20,3 +20,30 @@ $("#copyTerminal")?.addEventListener("click",()=>copyText("whoami\n1exbug — se
 $$('.target-row.clickable').forEach(row=>{const go=()=>{location.href=row.dataset.url};row.addEventListener('click',go);row.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();go()}})});
 
 $$("[data-tilt]").forEach(c=>{c.addEventListener("pointermove",e=>{if(innerWidth<900)return;let r=c.getBoundingClientRect(),x=e.clientX/r.width-r.left/r.width,y=e.clientY/r.height-r.top/r.height;c.style.transform=`perspective(900px) rotateX(${-(e.clientY-r.top)/r.height*5+2.5}deg) rotateY(${(e.clientX-r.left)/r.width*6-3}deg) translateY(-4px)`});c.addEventListener("pointerleave",()=>c.style.transform="")});
+
+// v20 interactive vulnerability filters
+$$('#vulnFilters .filter').forEach(btn=>btn.addEventListener('click',()=>{
+  $$('#vulnFilters .filter').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  const filter=btn.dataset.filter;
+  $$('.vuln-item').forEach(item=>{ item.style.display=(filter==='all'||item.dataset.vuln===filter)?'flex':'none'; });
+}));
+
+// v20 interactive research console
+const consoleForm=$('#consoleForm'), consoleInput=$('#consoleInput'), consoleOutput=$('#consoleOutput');
+const consoleResponses={
+  about:'1exbug — independent web security research. Focus: web, API, auth, access control and business logic.',
+  findings:'Documented: authentication, IDOR/BOLA, XSS, race conditions, WebSockets, session security and business logic issues.',
+  targets:'1xSlots · ON-X · Zooma · BC.GAME · JetTon · Shuffle · Cloudbet · Casher · Vodka Casino',
+  contact:'Telegram: @1exbug · Email: onexbugs@gmail.com · GitHub: github.com/1exbug',
+  help:'about · findings · targets · contact · clear'
+};
+consoleForm?.addEventListener('submit',e=>{
+  e.preventDefault();
+  const cmd=consoleInput.value.trim().toLowerCase();
+  if(!cmd)return;
+  const line=document.createElement('p'); line.innerHTML='<b>1exbug@research:~$</b> '+cmd; consoleOutput.appendChild(line);
+  if(cmd==='clear'){consoleOutput.innerHTML='';}
+  else {const out=document.createElement('p'); out.className=consoleResponses[cmd]?'ok':'err'; out.textContent=consoleResponses[cmd]||'Unknown command. Type help.'; consoleOutput.appendChild(out);}
+  consoleInput.value=''; consoleOutput.scrollTop=consoleOutput.scrollHeight;
+});
