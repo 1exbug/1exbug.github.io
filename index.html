@@ -11,7 +11,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css?v=20260930v25">
+<link rel="stylesheet" href="style.css?v=20260930v26">
 </head>
 <body>
 <a class="skip-link" href="#main-content">Skip to content</a>
@@ -130,13 +130,11 @@
       <p data-i18n="cards.zooma.text">Race conditions, IDOR, XSS and token-exposure issues reported through a responsible disclosure channel.</p>
       <div class="tags"><span>Race</span><span>IDOR</span><span>XSS</span><span>Token</span></div>
       <div class="disclosure-note">
+        <p class="disclosure-highlight" data-i18n="cards.zooma.result">Zooma подтвердила XSS через winnerName в розыгрышах, а также Stored XSS в Classic1v1, GiveAway, RainDrop и Tournaments Feed и сообщила о готовности выплатить 35 000 ₽.</p>
         <p><strong data-i18n="cards.zooma.statusLabel">Статус:</strong> <span class="status confirmed" data-i18n="cards.zooma.status">Ответ получен</span></p>
         <p><strong data-i18n="cards.zooma.rewardLabel">Награда:</strong> <span data-i18n="cards.zooma.reward">35 000 ₽</span></p>
         <p><strong data-i18n="cards.zooma.permissionLabel">Разрешение на исследование:</strong> <span data-i18n="cards.zooma.permission">получено 23.09.2026</span></p>
         <p><strong data-i18n="cards.zooma.bountyLabel">Bug bounty программа:</strong> <span data-i18n="cards.zooma.bounty">отсутствует, выплаты в индивидуальном порядке</span></p>
-        <p data-i18n="cards.zooma.result">Zooma подтвердила XSS через winnerName в розыгрышах и сообщила о готовности выплатить 35 000 ₽.</p>
-        <p data-i18n="cards.zooma.position">По остальным пунктам Zooma указала, что подмена userID не даёт доступа к чужим данным, verify-раунды публичны, seed раскрывается только после завершения раунда, а Centrifugo JWT является клиентским connection token.</p>
-        <p><strong>Примечание:</strong> продолжается анализ realtime-каналов Centrifugo. Отправлен второй отчёт по потенциальным Stored XSS в Classic1v1, GiveAway, RainDrop и Tournaments Feed.</p>
       </div>
     </article>
     
@@ -277,7 +275,7 @@
 
 <footer><span>© 2026 1exbug</span><span>security research / responsible disclosure</span><a href="#home">↑ top</a></footer>
 
-<script src="lang.js?v=20260930v25" defer></script>
-<script src="script.js?v=20260930v25" defer></script>
+<script src="lang.js?v=20260930v26" defer></script>
+<script src="script.js?v=20260930v26" defer></script>
 </body>
 </html>

@@ -132,3 +132,5 @@
 @media (prefers-reduced-motion:reduce){
   .reveal,.reveal.in-view,.page-ready .hero-copy .status-line,.page-ready .hero-index,.page-ready .hero h1,.page-ready .hero-sub,.page-ready .hero-actions,.page-ready .hero-foot,.page-ready .hero-visual{animation:none!important;opacity:1!important;transform:none!important}
 }
+
+.disclosure-highlight{margin:0 0 14px!important;padding:12px 14px;border:1px solid rgba(183,255,91,.18);border-radius:10px;background:rgba(183,255,91,.035);line-height:1.55}
