@@ -193,7 +193,7 @@
   const consoleResponses = {
     about: '1exbug — independent web security research. Focus: web, API, auth, access control and business logic.',
     findings: '22 documented findings across authentication, authorization, IDOR/BOLA, XSS, race conditions, WebSockets and business logic.',
-    targets: '1xSlots · ON-X · Zooma · BC.GAME · JetTon · Shuffle · Cloudbet · Casher · Vodka Casino · CABURA',
+    targets: '1xSlots · ON-X · Zooma · BC.GAME · JetTon · Shuffle · Cloudbet · Casher · Vodka Casino · CABURA · Dragon Money',
     payouts: '1xSlots — 200 000 ₽ · ON-X Casino — 75 000 ₽ · Zooma Casino — 35 000 ₽ offered',
     status: 'Public write-ups: 2 · Responsible disclosure: active · Contact: @onexbug / onexbugs@gmail.com',
     cabura: 'CABURA report 06 — six documented security findings. Use the research card to open the full report.',
@@ -518,6 +518,149 @@ fetch('/api/appeal/create', {
           timeline: 'Найдено: 2025-11-xx · Отправлено: 2025-11-xx · Статус: ожидание ответа'
         }
       ]
+    },
+    {
+      id: 7,
+      target: 'Dragon Money',
+      status: 'reported',
+      title: {
+        ru: 'Dragon Money — отчёт по уязвимостям',
+        en: 'Dragon Money — Bug Bounty Report'
+      },
+      summary: {
+        ru: 'Проведено исследование клиентской части Dragon Money (drgn70.casino). Документировано 7 уязвимостей, включая Stored XSS, жёстко заданный HMAC-ключ, mock FingerprintJS, клиентские проверки ролей и JWT в localStorage.',
+        en: 'The client-side Dragon Money application (drgn70.casino) was reviewed. Seven findings were documented, including Stored XSS, a hard-coded HMAC key, a production FingerprintJS mock value, client-side role checks and a JWT stored in localStorage.'
+      },
+      tags: ['XSS', 'CWE-79', 'CWE-321', 'Critical'],
+      statusLine: {
+        ru: '🟡 Отчёт отправлен в security@drag0n.team',
+        en: '🟡 Reported to security@drag0n.team'
+      },
+      evidence: {
+        ru: 'Подтверждение: POST /srv/api/v1/profile/setting → 403 Forbidden. Ответ: {"success":false,"error":"internal_server_error","message":"Internal Server Error"}',
+        en: 'Evidence noted: POST /srv/api/v1/profile/setting → 403 Forbidden. Response: {"success":false,"error":"internal_server_error","message":"Internal Server Error"}'
+      },
+      findings: [
+        {
+          title: { ru: 'Stored XSS через уведомление о переводе (код 1003)', en: 'Stored XSS via transfer notification (code 1003)' },
+          desc: { ru: 'В компоненте Noty пользовательский текст попадает в innerHTML notification-content без безопасного экранирования.', en: 'In the Noty component, user-controlled text is written into notification-content through innerHTML without safe escaping.' },
+          severity: 'Critical',
+          cwe: 'CWE-79',
+          where: { ru: 'dragonmoney.js → компонент Noty; sink: innerHTML в notification-content', en: 'dragonmoney.js → Noty component; sink: innerHTML in notification-content' },
+          steps: {
+            ru: ['Создать два аккаунта A и B.', 'На A установить имя с XSS-payload.', 'Сделать перевод с A на B.', 'На B сработает alert при обработке уведомления о переводе.'],
+            en: ['Create two accounts, A and B.', 'Set the display name of A to the supplied XSS test payload.', 'Transfer funds from A to B in the authorized test environment.', 'On B, verify whether the notification renders the payload as HTML.']
+          },
+          poc: `E("div", { innerHTML: s.text }, null, 8, ee)
+1003: e => n.t("messages.1003", Be(e, [0, 1]))
+
+Payload:
+<img src=x onerror=alert(document.domain)>`,
+          impact: { ru: 'Stored XSS с выполнением JavaScript в контексте пользователя, получающего уведомление.', en: 'Stored XSS with script execution in the security context of a user who renders the notification.' },
+          remediation: { ru: 'Заменить небезопасный innerHTML на textContent/безопасный шаблонизатор, экранировать пользовательский текст и применить CSP как дополнительный слой защиты.', en: 'Replace unsafe innerHTML with textContent or a safe templating path, encode user-controlled text and use CSP as an additional defense layer.' },
+          timeline: 'Найдено / отправлено: 2025-11-xx'
+        },
+        {
+          title: { ru: 'HMAC-ключ для подписи API-запросов в клиенте', en: 'HMAC signing key exposed in the client' },
+          desc: { ru: 'Функция mixSign формирует подпись, используя ключ, собираемый из обфусцированного массива чисел в production bundle.', en: 'mixSign builds request signatures using a key reconstructed from an obfuscated numeric array in the production bundle.' },
+          severity: 'Critical',
+          cwe: 'CWE-321',
+          where: { ru: 'dragonmoney.js → функция mixSign', en: 'dragonmoney.js → mixSign function' },
+          steps: {
+            ru: ['Найти функцию mixSign в bundle.', 'Проследить присваивания protected_public, userMarker и serverTimeCorrection.', 'Найти сборку ключа из массива: R = b.split(",").map(Number).map(String.fromCharCode).reverse().join("").', 'Проверить, что ключ доступен клиенту и используется для подписи запросов.'],
+            en: ['Locate mixSign in the client bundle.', 'Trace the protected_public, userMarker and serverTimeCorrection assignments.', 'Identify the key reconstruction: R = b.split(",").map(Number).map(String.fromCharCode).reverse().join("").', 'Confirm the reconstructed key is present in the client and is used for request signing.']
+          },
+          poc: `mixSign(t, s) {
+  t.protected_public = !!s.protected_public;
+  t.userMarker = r;
+  t.serverTimeCorrection = i;
+  return Ea(t);
+}
+
+R = b.split(",").map(Number).map(String.fromCharCode).reverse().join("")`,
+          impact: { ru: 'Раскрытие общего секрета подписи может позволить подделывать подписанные API-запросы и обходить назначение protected-параметров, если сервер полагается на этот клиентский секрет.', en: 'Exposure of the signing secret may allow forged signed API requests and undermine protected-request controls if the server relies on this client-held secret.' },
+          remediation: { ru: 'Никогда не помещать общий секрет HMAC в клиентский bundle. Подписывать чувствительные запросы только секретом, доступным серверу, а для клиента использовать серверную сессию/одноразовые токены.', en: 'Never ship a shared HMAC secret in a client bundle. Perform sensitive request signing with a server-held secret and use server-side sessions or short-lived, scoped client tokens.' },
+          timeline: 'Найдено / отправлено: 2025-11-xx'
+        },
+        {
+          title: { ru: 'Mock-значение FingerprintJS в production', en: 'Production FingerprintJS mock value' },
+          desc: { ru: 'В production-коде присутствует mockVisitorIdValue: "mockTempVisitorId" и используется в логике участия/форм антифрода.', en: 'Production code contains mockVisitorIdValue: "mockTempVisitorId" and uses it in game participation and anti-fraud-related forms.' },
+          severity: 'High',
+          cwe: 'CWE-453',
+          where: { ru: 'mockVisitorIdValue; используется в Mo.participateInGame(), GiftPlinkoModal и PromocodeForm', en: 'mockVisitorIdValue; used by Mo.participateInGame(), GiftPlinkoModal and PromocodeForm' },
+          steps: {
+            ru: ['Найти mockVisitorIdValue в production bundle.', 'Проследить использование значения в Mo.participateInGame().', 'Проверить GiftPlinkoModal и PromocodeForm.', 'Убедиться, что сервер не принимает mock-идентификатор как достоверный fingerprint.'],
+            en: ['Locate mockVisitorIdValue in the production bundle.', 'Trace its use from Mo.participateInGame().', 'Review GiftPlinkoModal and PromocodeForm references.', 'Verify that the server does not trust the mock identifier as an anti-fraud identity signal.']
+          },
+          poc: `mockVisitorIdValue: "mockTempVisitorId"`,
+          impact: { ru: 'Может ослаблять антифрод-сигналы и позволять мультиаккаунтинг или злоупотребление бонусными механиками, если этот идентификатор используется как серверное доверенное значение.', en: 'May weaken anti-fraud signals and enable multi-accounting or bonus abuse if the identifier is trusted server-side as a device fingerprint.' },
+          remediation: { ru: 'Не использовать mock-значения в production. Получать fingerprint на сервере или проверять доверенность значения серверными механизмами.', en: 'Remove mock identifiers from production and validate device/risk signals on the server rather than trusting a client-supplied fingerprint value.' },
+          timeline: 'Найдено / отправлено: 2025-11-xx'
+        },
+        {
+          title: { ru: 'Stored XSS в ChatPinMessage', en: 'Stored XSS in ChatPinMessage' },
+          desc: { ru: 'Содержимое pinnedMessage выводится через sink innerHTML: o(r). Для воспроизведения требуются права модератора.', en: 'The pinnedMessage content reaches an innerHTML sink: o(r). Reproduction requires moderator-level privileges.' },
+          severity: 'High',
+          cwe: 'CWE-79',
+          where: { ru: 'ChatPinMessage → innerHTML: o(r) для pinnedMessage', en: 'ChatPinMessage → innerHTML: o(r) for pinnedMessage' },
+          steps: {
+            ru: ['Получить контролируемую тестовую роль модератора.', 'Создать или изменить pinnedMessage тестовым payload.', 'Открыть чат в аккаунте, который отображает закреплённое сообщение.', 'Проверить выполнение payload в контексте страницы.'],
+            en: ['Use a controlled test account with moderator privileges.', 'Create or update a pinnedMessage with the test payload.', 'Open the chat in an account that renders the pinned message.', 'Verify whether the payload executes in the page context.']
+          },
+          poc: `<img src=x onerror=alert(document.domain)>`,
+          impact: { ru: 'Stored XSS в чат-контенте с потенциальным выполнением произвольного JavaScript для пользователей, которым показывается закреплённое сообщение.', en: 'Stored XSS in chat content with potential script execution for users who render the pinned message.' },
+          remediation: { ru: 'Экранировать pinnedMessage и выводить текст через textContent либо безопасный renderer. Не доверять содержимому, созданному модератором.', en: 'Encode pinnedMessage content and render it with textContent or a safe renderer. Do not trust moderator-authored HTML by default.' },
+          timeline: 'Найдено / отправлено: 2025-11-xx'
+        },
+        {
+          title: { ru: 'Stored XSS в PromoGameModal', en: 'Stored XSS in PromoGameModal' },
+          desc: { ru: 'Параметр modalDescription попадает в sink innerHTML: l(C). Для воспроизведения требуются права администратора.', en: 'The modalDescription value reaches an innerHTML sink: l(C). Reproduction requires administrator privileges.' },
+          severity: 'High',
+          cwe: 'CWE-79',
+          where: { ru: 'PromoGameModal → innerHTML: l(C) для modalDescription', en: 'PromoGameModal → innerHTML: l(C) for modalDescription' },
+          steps: {
+            ru: ['Использовать контролируемый административный аккаунт.', 'Сохранить тестовое значение modalDescription с XSS-payload.', 'Открыть PromoGameModal у пользователя.', 'Проверить, интерпретируется ли значение как HTML.'],
+            en: ['Use a controlled administrator test account.', 'Store the test XSS payload in modalDescription.', 'Open PromoGameModal for a test user.', 'Verify whether the value is interpreted as executable HTML.']
+          },
+          poc: `innerHTML: l(C)
+
+Payload:
+<img src=x onerror=alert(document.domain)>`,
+          impact: { ru: 'Stored XSS в промо-механике с выполнением JavaScript у пользователей, которым отображается вредоносное описание.', en: 'Stored XSS in the promotional UI with JavaScript execution for users who render the malicious description.' },
+          remediation: { ru: 'Экранировать modalDescription, использовать textContent или санитайзер с allowlist, а также CSP в качестве дополнительной защиты.', en: 'Encode modalDescription, use textContent or a strict allowlist sanitizer, and add CSP as defense in depth.' },
+          timeline: 'Найдено / отправлено: 2025-11-xx'
+        },
+        {
+          title: { ru: 'Проверки ролей только на клиенте', en: 'Role checks enforced only client-side' },
+          desc: { ru: 'Роутер использует проверку Pm(e) → po[o] >= po[a], однако защита уровня интерфейса не должна заменять серверную авторизацию.', en: 'The router uses Pm(e) → po[o] >= po[a], but client-side route checks must not replace server-side authorization.' },
+          severity: 'Medium',
+          cwe: 'CWE-602',
+          where: { ru: 'Роутер: Pm(e) → po[o] >= po[a]', en: 'Router: Pm(e) → po[o] >= po[a]' },
+          steps: {
+            ru: ['Определить роли и соответствующие значения po.', 'Проверить, что ограничение применяется в клиентском роутере.', 'Напрямую отправить запрос к контролируемому API-маршруту, недоступному текущей роли.', 'Подтвердить сервером, что несанкционированный запрос отклоняется. Если сервер допускает действие — подтверждается вертикальное повышение привилегий.'],
+            en: ['Map the role values represented by po.', 'Confirm the restriction is applied in the client-side router.', 'Directly request a privileged API endpoint from a lower-privileged test account.', 'Verify that the server rejects the request; acceptance by the server would confirm a privilege-escalation condition.']
+          },
+          poc: `Pm(e) → po[o] >= po[a]`,
+          impact: { ru: 'При отсутствии серверной проверки прямой вызов привилегированных API может привести к вертикальному повышению привилегий.', en: 'If server-side authorization is absent, direct access to privileged APIs could permit vertical privilege escalation.' },
+          remediation: { ru: 'Проверять роль и право на действие на сервере для каждого привилегированного endpoint. Клиентскую проверку использовать только как UX-ограничение.', en: 'Enforce role and permission checks server-side for every privileged endpoint. Treat client-side checks as UX only.' },
+          timeline: 'Найдено / отправлено: 2025-11-xx'
+        },
+        {
+          title: { ru: 'JWT Centrifuge хранится в localStorage', en: 'Centrifuge JWT stored in localStorage' },
+          desc: { ru: 'Токен Centrifuge сохраняется через xe(me.CENTRIFUGE_JWT_TOKEN, "").', en: 'The Centrifuge token is stored using xe(me.CENTRIFUGE_JWT_TOKEN, "").' },
+          severity: 'Medium',
+          cwe: 'CWE-522',
+          where: { ru: 'dragonmoney.js → xe(me.CENTRIFUGE_JWT_TOKEN, "")', en: 'dragonmoney.js → xe(me.CENTRIFUGE_JWT_TOKEN, "")' },
+          steps: {
+            ru: ['Открыть Application → Local Storage в тестовом браузере.', 'Найти ключ, соответствующий CENTRIFUGE_JWT_TOKEN.', 'Проверить, что значение доступно JavaScript на странице.', 'Рассмотреть риск компрометации токена при любой XSS в том же origin.'],
+            en: ['Open Application → Local Storage in the test browser.', 'Locate the key associated with CENTRIFUGE_JWT_TOKEN.', 'Confirm the value is readable by JavaScript in the page origin.', 'Assess whether any XSS in the same origin could read and reuse the token.']
+          },
+          poc: `xe(me.CENTRIFUGE_JWT_TOKEN, "")`,
+          impact: { ru: 'Любая XSS в том же origin потенциально может прочитать JWT из localStorage и использовать его для действий, разрешённых этим токеном.', en: 'Any XSS on the same origin may be able to read the JWT from localStorage and reuse it for actions allowed by that token.' },
+          remediation: { ru: 'Не хранить чувствительные session/connection tokens в localStorage без необходимости. Рассмотреть HttpOnly Secure SameSite cookie или короткоживущие scoped-токены с минимальными правами.', en: 'Avoid localStorage for sensitive session/connection tokens where possible. Consider secure HttpOnly SameSite cookies or short-lived, narrowly scoped tokens.' },
+          timeline: 'Найдено / отправлено: 2025-11-xx'
+        }
+      ]
     }
   ];
 
@@ -550,8 +693,8 @@ fetch('/api/appeal/create', {
     activeReportId = report.id;
     const lang = currentLang();
     const copy = reportCopy[lang];
-    reportModalTitle.textContent = `CABURA — ${trReport(report.title)}`;
-    reportModalMeta.textContent = `${copy.meta} 06 / CABURA`;
+    reportModalTitle.textContent = `${report.target} — ${trReport(report.title)}`;
+    reportModalMeta.textContent = `${copy.meta} ${String(report.id).padStart(2, '0')} / ${report.target}`;
     reportModalHint.textContent = copy.hint;
     reportModalDone.textContent = copy.close;
     reportModalClose?.setAttribute('aria-label', copy.close);
@@ -567,6 +710,13 @@ fetch('/api/appeal/create', {
     report.tags.forEach(tag => tagWrap.append(buildText('span', '', tag)));
     summary.append(buildText('span', 'report-modal__label', copy.tags));
     summary.append(tagWrap);
+    if (report.evidence) {
+      const evidence = document.createElement('div');
+      evidence.className = 'report-callout report-evidence';
+      evidence.append(buildText('h4', '', lang === 'ru' ? 'Подтверждение' : 'Evidence'));
+      evidence.append(buildText('p', '', trReport(report.evidence)));
+      summary.append(evidence);
+    }
     fragment.append(summary);
 
     const findingsWrap = document.createElement('section');
@@ -584,6 +734,28 @@ fetch('/api/appeal/create', {
       head.append(indexEl, titleWrap);
       article.append(head);
       article.append(buildText('p', 'report-finding__desc', trReport(finding.desc)));
+      if (finding.cwe || finding.where) {
+        const facts = document.createElement('div');
+        facts.className = 'report-finding__facts';
+        if (finding.cwe) {
+          const cwe = document.createElement('span');
+          cwe.append(buildText('b', '', 'CWE'));
+          const link = document.createElement('a');
+          link.href = `https://cwe.mitre.org/data/definitions/${String(finding.cwe).replace(/[^0-9]/g, '')}.html`;
+          link.target = '_blank';
+          link.rel = 'noopener noreferrer';
+          link.textContent = finding.cwe;
+          cwe.append(document.createTextNode(' '), link);
+          facts.append(cwe);
+        }
+        if (finding.where) {
+          const where = document.createElement('span');
+          where.append(buildText('b', '', lang === 'ru' ? 'Где' : 'Where'));
+          where.append(document.createTextNode(' '), buildText('span', '', trReport(finding.where)));
+          facts.append(where);
+        }
+        article.append(facts);
+      }
 
       const steps = document.createElement('div');
       steps.className = 'report-block';
