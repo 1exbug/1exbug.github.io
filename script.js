@@ -47,3 +47,74 @@ consoleForm?.addEventListener('submit',e=>{
   else {const out=document.createElement('p'); out.className=consoleResponses[cmd]?'ok':'err'; out.textContent=consoleResponses[cmd]||'Unknown command. Type help.'; consoleOutput.appendChild(out);}
   consoleInput.value=''; consoleOutput.scrollTop=consoleOutput.scrollHeight;
 });
+
+/* v21 premium motion engine */
+(function(){
+  const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const fine = window.matchMedia('(pointer:fine)').matches;
+  const dot = document.getElementById('cursorDot'), ring = document.getElementById('cursorRing');
+
+  if (fine && dot && ring && !reduced) {
+    let mx=innerWidth/2,my=innerHeight/2,rx=mx,ry=my;
+    addEventListener('pointermove', e=>{
+      mx=e.clientX; my=e.clientY;
+      document.body.style.setProperty('--mx',mx+'px');
+      document.body.style.setProperty('--my',my+'px');
+      dot.style.opacity='1'; ring.style.opacity='1';
+      dot.style.transform=`translate3d(${mx}px,${my}px,0) translate(-50%,-50%)`;
+    },{passive:true});
+    function cursorLoop(){ rx+=(mx-rx)*.16; ry+=(my-ry)*.16; ring.style.transform=`translate3d(${rx}px,${ry}px,0) translate(-50%,-50%)`; requestAnimationFrame(cursorLoop); }
+    cursorLoop();
+    document.querySelectorAll('a,button,.clickable,.stack-list span,input').forEach(el=>{
+      el.addEventListener('pointerenter',()=>ring.classList.add('hover'));
+      el.addEventListener('pointerleave',()=>ring.classList.remove('hover'));
+    });
+  }
+
+  if (reduced || !window.gsap) return;
+  gsap.registerPlugin(ScrollTrigger);
+
+  // Cinematic hero entrance.
+  const heroTl=gsap.timeline({defaults:{ease:'power4.out'}});
+  heroTl.from('.hero-copy .status-line',{y:20,opacity:0,duration:.7})
+    .from('.hero-index',{y:24,opacity:0,duration:.6},'-=.45')
+    .from('.hero h1',{y:55,opacity:0,filter:'blur(12px)',duration:1.05},'-=.4')
+    .from('.hero-sub',{y:24,opacity:0,duration:.7},'-=.65')
+    .from('.hero-actions .btn',{y:20,opacity:0,stagger:.09,duration:.55},'-=.45')
+    .from('.hero-foot',{opacity:0,y:14,duration:.5},'-=.3')
+    .from('.hero-visual',{x:60,opacity:0,scale:.92,rotateY:-8,duration:1.2},'-=1');
+
+  // Scroll-linked depth and section choreography.
+  gsap.utils.toArray('.section-head').forEach((head)=>{
+    gsap.from(head.querySelector('h2'),{scrollTrigger:{trigger:head,start:'top 88%',once:true},y:28,opacity:0,clipPath:'inset(100% 0 0 0)',duration:.85,ease:'power3.out'});
+  });
+  gsap.utils.toArray('.metrics > div').forEach((el,i)=>{
+    gsap.from(el,{scrollTrigger:{trigger:'.metrics',start:'top 90%',once:true},y:30,opacity:0,scale:.9,duration:.7,delay:i*.08,ease:'back.out(1.7)'});
+  });
+  gsap.utils.toArray('.research-card,.principle,.method-card,.target-row,.bounty-row,.vuln-item').forEach((el,i)=>{
+    gsap.from(el,{scrollTrigger:{trigger:el,start:'top 92%',once:true},y:42,opacity:0,rotateX:5,transformPerspective:900,duration:.8,delay:(i%4)*.06,ease:'power3.out'});
+  });
+
+  // Subtle hero parallax; no scroll hijacking.
+  gsap.to('.hero-visual',{yPercent:-8,rotateZ:.7,ease:'none',scrollTrigger:{trigger:'.hero',start:'top top',end:'bottom top',scrub:1.2}});
+  gsap.to('.hero-copy',{yPercent:-5,ease:'none',scrollTrigger:{trigger:'.hero',start:'top top',end:'bottom top',scrub:1.5}});
+  gsap.to('.hero-scanline',{y:()=>innerHeight*1.15,ease:'none',scrollTrigger:{start:0,end:()=>document.documentElement.scrollHeight-innerHeight,scrub:true}});
+
+  // Magnetic buttons.
+  document.querySelectorAll('.hero-actions .btn,.contact-links a,.contact-links button').forEach(btn=>{
+    btn.addEventListener('pointermove',e=>{
+      const r=btn.getBoundingClientRect(),x=(e.clientX-r.left-r.width/2)*.13,y=(e.clientY-r.top-r.height/2)*.13;
+      gsap.to(btn,{x,y,duration:.35,ease:'power3.out',overwrite:true});
+    });
+    btn.addEventListener('pointerleave',()=>gsap.to(btn,{x:0,y:0,duration:.55,ease:'elastic.out(1,.45)'}));
+  });
+
+  // 3D tilt with smooth interpolation for research cards.
+  document.querySelectorAll('[data-tilt]').forEach(card=>{
+    card.addEventListener('pointermove',e=>{
+      const r=card.getBoundingClientRect(),x=(e.clientX-r.left)/r.width-.5,y=(e.clientY-r.top)/r.height-.5;
+      gsap.to(card,{rotateX:-y*4.5,rotateY:x*6,z:12,duration:.45,ease:'power2.out',overwrite:true});
+    });
+    card.addEventListener('pointerleave',()=>gsap.to(card,{rotateX:0,rotateY:0,z:0,duration:.8,ease:'elastic.out(1,.55)'}));
+  });
+})();
