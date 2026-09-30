@@ -11,7 +11,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css?v=20260930v26">
+<link rel="stylesheet" href="style.css?v=20260930v27">
 </head>
 <body>
 <a class="skip-link" href="#main-content">Skip to content</a>
@@ -74,8 +74,8 @@
 </section>
 
 <section class="metrics">
-  <div><strong>16</strong><span data-i18n="metrics.findings">documented findings</span></div>
-  <div><strong>09</strong><span data-i18n="metrics.targets">research targets</span></div>
+  <div><strong>22</strong><span data-i18n="metrics.findings">documented findings</span></div>
+  <div><strong>10</strong><span data-i18n="metrics.targets">research targets</span></div>
   <div><strong>03</strong><span data-i18n="metrics.focus">core focus areas</span></div>
   <div><strong>02</strong><span data-i18n="metrics.writeups">public write-ups</span></div>
 </section>
@@ -83,8 +83,8 @@
 <section class="section stats-section" id="stats">
   <div class="section-head reveal"><span>02A</span><div><small data-i18n="labels.stats">SECURITY STATS</small><h2 data-i18n="stats.title">Research at a glance.</h2></div></div>
   <div class="stats-grid reveal">
-    <article><span>01</span><strong>16</strong><b data-i18n="stats.findings">documented findings</b></article>
-    <article><span>02</span><strong>09</strong><b data-i18n="stats.targets">research targets</b></article>
+    <article><span>01</span><strong>22</strong><b data-i18n="stats.findings">documented findings</b></article>
+    <article><span>02</span><strong>10</strong><b data-i18n="stats.targets">research targets</b></article>
     <article><span>03</span><strong>200K ₽</strong><b data-i18n="stats.payout">largest listed payout</b></article>
     <article><span>04</span><strong>02</strong><b data-i18n="stats.writeups">public write-ups</b></article>
   </div>
@@ -162,6 +162,18 @@
       <div class="tags"><span>WebSocket</span><span>Broken Access Control</span><span>Centrifugo</span></div>
       <a href="vodka-casino.html" class="read-link"><span data-i18n="cards.vodka.read">Open research</span><b>↗</b></a>
     </article>
+    <article class="research-card cabura-card reveal delay-3" data-tilt>
+      <div class="card-meta"><span>CABURA</span><i>REPORTED</i></div>
+      <div class="card-number">06</div>
+      <h3 data-i18n="cards.cabura.title">Security findings</h3>
+      <p data-i18n="cards.cabura.text">Статический и динамический аудит клиентской части cabura. Обнаружены критические проблемы контроля доступа, обхода антибот-защиты и слабой валидации финансовых операций.</p>
+      <div class="tags"><span>BOLA</span><span>IDOR</span><span>Anti-Bot</span><span>WebSocket</span><span>CSRF</span><span>SSRF</span><span>Business Logic</span></div>
+      <div class="disclosure-note">
+        <p><strong data-i18n="cards.cabura.statusLabel">Статус:</strong> <span class="status pending" data-i18n="cards.cabura.status">Отчёт отправлен в поддержку Cabura</span></p>
+        <p class="cabura-findings-line"><strong data-i18n="cards.cabura.findingsLabel">Находки:</strong> <span data-i18n="cards.cabura.findingsCount">6 findings</span></p>
+      </div>
+      <button type="button" class="read-link report-read" data-report-id="6" aria-haspopup="dialog"><span data-i18n="cards.cabura.read">Читать исследование</span><b>↗</b></button>
+    </article>
   </div>
 </section>
 
@@ -230,6 +242,7 @@
     <div class="target-row"><span>07</span><strong>Cloudbet</strong><em data-i18n="targets.pending">disclosure</em><b>•</b></div>
     <div class="target-row"><span>08</span><strong>Casher</strong><em data-i18n="targets.reported">report sent</em><b>•</b></div>
     <div class="target-row"><span>09</span><strong>Vodka Casino</strong><em data-i18n="targets.verified">verified research</em><b>✓</b></div>
+    <div class="target-row clickable report-target-row" role="button" tabindex="0" data-report-id="6"><span>10</span><strong>CABURA</strong><em data-i18n="targets.reported">report sent</em><b>↗</b></div>
   </div>
 </section>
 
@@ -271,11 +284,28 @@
     <span class="toast" id="toast" data-i18n="copied">Email copied</span>
   </div>
 </section>
+
+<dialog class="report-modal" id="reportModal" aria-labelledby="reportModalTitle">
+  <div class="report-modal__shell">
+    <header class="report-modal__header">
+      <div>
+        <span class="report-modal__eyebrow" id="reportModalMeta">REPORT 06 / CABURA</span>
+        <h2 id="reportModalTitle">CABURA — Security findings</h2>
+      </div>
+      <button type="button" class="report-modal__close" id="reportModalClose" aria-label="Close report" autofocus>×</button>
+    </header>
+    <div class="report-modal__body" id="reportModalBody"></div>
+    <footer class="report-modal__footer">
+      <span id="reportModalHint">Esc or click outside to close</span>
+      <button type="button" class="btn secondary report-modal__done" id="reportModalDone">Close</button>
+    </footer>
+  </div>
+</dialog>
 </main>
 
 <footer><span>© 2026 1exbug</span><span>security research / responsible disclosure</span><a href="#home">↑ top</a></footer>
 
-<script src="lang.js?v=20260930v26" defer></script>
-<script src="script.js?v=20260930v26" defer></script>
+<script src="lang.js?v=20260930v27" defer></script>
+<script src="script.js?v=20260930v27" defer></script>
 </body>
 </html>
