@@ -154,22 +154,26 @@
       </div>
     </article>
 
-    <article class="research-card reveal delay-3" data-tilt>
-      <div class="card-meta"><span>VODKA CASINO</span><i>VERIFIED</i></div>
+    <article class="research-card reveal delay-3 vodka-card" data-tilt>
+      <div class="card-meta"><span>VODKA CASINO</span><i>SCAM</i></div>
       <div class="card-number">05</div>
       <h3 data-i18n="cards.vodka.title">WebSocket access control</h3>
       <p data-i18n="cards.vodka.text">Исследование WebSocket / Centrifugo. Обнаружена проблема авторизации персональных каналов.</p>
       <div class="tags"><span>WebSocket</span><span>Broken Access Control</span><span>Centrifugo</span></div>
-      <a href="vodka-casino.html" class="read-link"><span data-i18n="cards.vodka.read">Open research</span><b>↗</b></a>
+      <div class="disclosure-note">
+        <p><strong data-i18n="cards.vodka.statusLabel">Статус:</strong> <span class="status scam">SCAM</span></p>
+        <p><strong data-i18n="cards.vodka.responseLabel">Коммуникация:</strong> <span data-i18n="cards.vodka.response">Отчёт отправлен в поддержку; ответа по e-mail не получено.</span></p>
+      </div>
+      <a href="vodka-casino.html" class="read-link"><span data-i18n="cards.vodka.read">Открыть исследование</span><b>↗</b></a>
     </article>
     <article class="research-card cabura-card reveal delay-3" data-tilt>
-      <div class="card-meta"><span>CABURA</span><i>REPORTED</i></div>
+      <div class="card-meta"><span>CABURA</span><i>SCAM</i></div>
       <div class="card-number">06</div>
       <h3 data-i18n="cards.cabura.title">Security findings</h3>
       <p data-i18n="cards.cabura.text">Статический и динамический аудит клиентской части cabura. Обнаружены критические проблемы контроля доступа, обхода антибот-защиты и слабой валидации финансовых операций.</p>
       <div class="tags"><span>BOLA</span><span>IDOR</span><span>Anti-Bot</span><span>WebSocket</span><span>CSRF</span><span>SSRF</span><span>Business Logic</span></div>
       <div class="disclosure-note">
-        <p><strong data-i18n="cards.cabura.statusLabel">Статус:</strong> <span class="status pending" data-i18n="cards.cabura.status">Отчёт отправлен в поддержку Cabura</span></p>
+        <p><strong data-i18n="cards.cabura.statusLabel">Статус:</strong> <span class="status scam" data-i18n="cards.cabura.status">SCAM</span></p>
         <p class="cabura-findings-line"><strong data-i18n="cards.cabura.findingsLabel">Находки:</strong> <span data-i18n="cards.cabura.findingsCount">6 findings</span></p>
       </div>
       <button type="button" class="read-link report-read" data-report-id="6" aria-haspopup="dialog"><span data-i18n="cards.cabura.read">Читать исследование</span><b>↗</b></button>
@@ -223,11 +227,17 @@
       <span><strong data-i18n="scam.basisLabel">Basis:</strong> <span data-i18n="scam.moneyx.basis">responsible disclosure sent; no reply received</span></span>
       <span><strong data-i18n="scam.classLabel">Classification:</strong> <span class="scam-unverified" data-i18n="scam.moneyx.classification">unverified / unresolved</span></span>
     </div>
-    <div class="target-row scam-row"><span>02</span><strong>CABURA</strong><em data-i18n="scam.cabura.status">communication unresolved</em><b>!</b></div>
+    <div class="target-row scam-row"><span>02</span><strong>CABURA</strong><em data-i18n="scam.cabura.status">SCAM</em><b>!</b></div>
     <div class="scam-details">
       <span><strong data-i18n="scam.lastContactLabel">Last contact:</strong> <span data-i18n="scam.cabura.lastContact">30.09.2026</span></span>
       <span><strong data-i18n="scam.basisLabel">Basis:</strong> <span data-i18n="scam.cabura.basis">According to the researcher, the support operator/admin communicated in a trolling / dismissive manner, prolonged the discussion and did not seriously address any of the reported points.</span></span>
-      <span><strong data-i18n="scam.classLabel">Classification:</strong> <span class="scam-unverified" data-i18n="scam.cabura.classification">unverified / unresolved communication issue</span></span>
+      <span><strong data-i18n="scam.classLabel">Classification:</strong> <span class="scam-unverified" data-i18n="scam.cabura.classification">researcher classification / communication unresolved</span></span>
+    </div>
+    <div class="target-row scam-row"><span>03</span><strong>Vodka Casino</strong><em data-i18n="scam.vodka.status">SCAM · no response</em><b>!</b></div>
+    <div class="scam-details">
+      <span><strong data-i18n="scam.lastContactLabel">Last contact:</strong> <span data-i18n="scam.vodka.lastContact">—</span></span>
+      <span><strong data-i18n="scam.basisLabel">Basis:</strong> <span data-i18n="scam.vodka.basis">Security report sent to support; no response received by email.</span></span>
+      <span><strong data-i18n="scam.classLabel">Classification:</strong> <span class="scam-unverified" data-i18n="scam.vodka.classification">researcher classification / no response</span></span>
     </div>
   </div>
 </section>
@@ -273,8 +283,8 @@
     <div class="target-row"><span>06</span><strong>Shuffle</strong><em data-i18n="targets.pending">disclosure</em><b>•</b></div>
     <div class="target-row"><span>07</span><strong>Cloudbet</strong><em data-i18n="targets.pending">disclosure</em><b>•</b></div>
     <div class="target-row"><span>08</span><strong>Casher</strong><em data-i18n="targets.reported">report sent</em><b>•</b></div>
-    <div class="target-row"><span>09</span><strong>Vodka Casino</strong><em data-i18n="targets.verified">verified research</em><b>✓</b></div>
-    <div class="target-row clickable report-target-row" role="button" tabindex="0" data-report-id="6"><span>10</span><strong>CABURA</strong><em data-i18n="targets.reported">report sent</em><b>↗</b></div>
+    <div class="target-row scam-row"><span>09</span><strong>Vodka Casino</strong><em data-i18n="targets.scam">SCAM · no response</em><b>!</b></div>
+    <div class="target-row scam-row clickable report-target-row" role="button" tabindex="0" data-report-id="6"><span>10</span><strong>CABURA</strong><em data-i18n="targets.scam">SCAM</em><b>!</b></div>
     <div class="target-row clickable report-target-row" role="button" tabindex="0" data-report-id="7"><span>11</span><strong>Dragon Money</strong><em data-i18n="targets.reported">report sent</em><b>↗</b></div>
   </div>
 </section>

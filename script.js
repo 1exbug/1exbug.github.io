@@ -238,7 +238,7 @@
     {
       id: 6,
       target: 'CABURA',
-      status: 'reported',
+      status: 'scam',
       title: { ru: 'Находки безопасности', en: 'Security findings' },
       summary: {
         ru: 'Проведён статический и динамический аудит клиентской части cabura. Обнаружены критические проблемы контроля доступа, обхода антибот-защиты и слабой валидации финансовых операций.',
@@ -246,8 +246,8 @@
       },
       tags: ['BOLA', 'IDOR', 'Anti-Bot', 'WebSocket', 'CSRF', 'SSRF', 'Business Logic'],
       statusLine: {
-        ru: '🟡 Отчёт отправлен в поддержку Cabura',
-        en: '🟡 Report sent to Cabura support'
+        ru: '⚠ SCAM — коммуникация не урегулирована',
+        en: '⚠ SCAM — disclosure communication unresolved'
       },
       findings: [
         {
