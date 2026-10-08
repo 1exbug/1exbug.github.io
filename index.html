@@ -186,6 +186,20 @@
       </div>
       <button type="button" class="read-link report-read" data-report-id="7" aria-haspopup="dialog"><span data-i18n="cards.dragon.read">Читать исследование</span><b>↗</b></button>
     </article>
+    <article class="research-card disclosure reveal delay-3 panda-card" data-tilt>
+      <div class="card-meta"><span>PANDA CASINO</span><i>REPORTED</i></div>
+      <div class="card-number">08</div>
+      <h3 data-i18n="cards.panda.title">Panda Casino — Security findings</h3>
+      <p data-i18n="cards.panda.text">Client-side security research of Panda Casino (combusti0n-1pamd4.com). Several security issues were identified, including XSS, token exposure and a publicly accessible Sentry credential.</p>
+      <div class="tags"><span>Stored XSS</span><span>WebSocket</span><span>Access Token</span><span>Sentry</span><span>Credentials</span></div>
+      <div class="disclosure-note">
+        <p><strong data-i18n="cards.panda.finding1Label">Stored XSS via WebSocket notifications:</strong> <span data-i18n="cards.panda.finding1">Notification content reaches dangerouslySetInnerHTML without apparent sanitization; controlled notification content may allow JavaScript execution in another user's browser.</span></p>
+        <p><strong data-i18n="cards.panda.finding2Label">Access Token Exposure:</strong> <span data-i18n="cards.panda.finding2">The access token is accessible through document.cookie and is also transmitted during the WebSocket handshake; together with XSS this may enable session compromise.</span></p>
+        <p><strong data-i18n="cards.panda.finding3Label">Sentry Auth Token Exposure:</strong> <span data-i18n="cards.panda.finding3">A hardcoded Sentry authentication credential was identified inside a publicly accessible JavaScript bundle.</span></p>
+        <p class="disclosure-highlight"><strong data-i18n="cards.panda.chainLabel">Potential attack chain:</strong> <span data-i18n="cards.panda.chain">Stored XSS → accessToken exposure → potential account/session compromise.</span></p>
+        <p><strong data-i18n="cards.panda.statusLabel">Status:</strong> <span class="status pending" data-i18n="cards.panda.status">Report prepared / awaiting technical review</span></p>
+      </div>
+    </article>
   </div>
 </section>
 
